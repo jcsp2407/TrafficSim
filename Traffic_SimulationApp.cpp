@@ -7,8 +7,8 @@
  * License:
  **************************************************************/
 
-#include "wx_pch.h"
 #include "Traffic_SimulationApp.h"
+#include <wx/wx.h>
 
 //(*AppHeaders
 #include "Traffic_SimulationMain.h"

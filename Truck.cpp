@@ -13,7 +13,7 @@ Truck::Truck(DirectionType direction, int lane, wxPoint basePosition, wxPoint of
 
 Truck::~Truck()
 {
-    //dtor
+    count--;
 }
 
 void Truck::show()

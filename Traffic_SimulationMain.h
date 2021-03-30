@@ -19,6 +19,17 @@
 
 class Traffic_SimulationFrame: public wxFrame
 {
+	wxBitmap start_img; //main screen when loading program
+	wxBitmap end_img; //ending screen
+	wxBitmap bg_img; //main simulation background image
+
+    wxBitmap car_img; //generic car
+    wxBitmap truck_img; //generic truck img
+    wxBitmap MOTORCYCLE_img;//generic bike img
+    wxBitmap trafficlight_img; //static traffic light
+    wxBitmap streets_img; //might need to remove this, but static streets
+
+
     public:
 
         Traffic_SimulationFrame(wxWindow* parent,wxWindowID id = -1);

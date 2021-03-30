@@ -7,9 +7,10 @@
  * License:
  **************************************************************/
 
-#include "wx_pch.h"
+
 #include "Traffic_SimulationMain.h"
 #include <wx/msgdlg.h>
+#include <wx/wx.h>
 
 //(*InternalHeaders(Traffic_SimulationFrame)
 #include <wx/intl.h>
@@ -55,6 +56,17 @@ END_EVENT_TABLE()
 
 Traffic_SimulationFrame::Traffic_SimulationFrame(wxWindow* parent,wxWindowID id)
 {
+
+	bg_img.LoadFile( wxT( "bg.png" ), wxBITMAP_TYPE_PNG );
+	start_img.LoadFile(wxT("start_img.png"),wxBITMAP_TYPE_PNG );
+	end_img.LoadFile(wxT("end_img.png"),wxBITMAP_TYPE_PNG );
+	car_img.LoadFile(wxT("car_img.png"),wxBITMAP_TYPE_PNG );
+	truck_img.LoadFile(wxT("truck_img.png"),wxBITMAP_TYPE_PNG );
+	MOTORCYCLE_img.LoadFile(wxT("MOTORCYCLE_img.png"),wxBITMAP_TYPE_PNG );
+	trafficlight_img.LoadFile(wxT("trafficlight_img.png"),wxBITMAP_TYPE_PNG );
+	streets_img.LoadFile(wxT("streets_img.png"),wxBITMAP_TYPE_PNG );
+
+
     //(*Initialize(Traffic_SimulationFrame)
     wxMenu* Menu1;
     wxMenu* Menu2;

@@ -13,7 +13,7 @@ Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint basePosition, 
 
 Motorcycle::~Motorcycle()
 {
-    //dtor
+    count--;
 }
 
 void Motorcycle::show(){

@@ -66,10 +66,6 @@
 		<Unit filename="Truck.h" />
 		<Unit filename="Vehicle.cpp" />
 		<Unit filename="Vehicle.h" />
-		<Unit filename="wx_pch.h">
-			<Option compile="1" />
-			<Option weight="0" />
-		</Unit>
 		<Unit filename="wxsmith/Traffic_Simulationframe.wxs" />
 		<Extensions>
 			<wxsmith version="1">

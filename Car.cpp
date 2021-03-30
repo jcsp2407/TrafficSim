@@ -13,7 +13,7 @@ Car::Car(DirectionType direction, int lane, wxPoint basePosition, wxPoint offset
 
 Car::~Car()
 {
-    //dtor
+    count--;
 }
 
 void Car::show()
