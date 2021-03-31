@@ -1,14 +1,16 @@
 #ifndef ARENA_H
 #define ARENA_H
 
-#include "Entity.h"
-#include <vector>
-#include <map>
-
-class Arena
+class Arena : public wxPanel
 {
     public:
-        Arena();
+        Arena(wxWindow *parent,
+            wxWindowID winid = wxID_ANY,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+            const wxString& name = wxPanelNameStr);
+
         virtual ~Arena();
 
         int Getintersections() { return intersections; }
@@ -30,9 +32,6 @@ class Arena
         static int length;
         static int width;
         int lanes;
-        std::map<wxPoint, Entity*> obstaclePos;
-        std::vector<Entity> stationary;
-        std::vector<Entity> vehicles;
 };
 
 #endif // ARENA_H

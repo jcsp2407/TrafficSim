@@ -1,5 +1,4 @@
 #include "Car.h"
-#include <iostream>     // std::cout, std::end
 
 int Car::count = 0;
 
@@ -14,7 +13,7 @@ Car::Car(DirectionType direction, int lane, wxPoint basePosition, wxPoint offset
 
 Car::~Car()
 {
-    count--;
+    //dtor
 }
 
 void Car::show()
