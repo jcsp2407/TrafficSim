@@ -1,6 +1,4 @@
 #include "TrafficLight.h"
-#include <wx/msgdlg.h>
-#include <iostream>
 
 TrafficLight::TrafficLight(LightType color, wxPoint basePosition, wxPoint offsetPosition, int arena):
      Entity(basePosition, offsetPosition, arena)
@@ -47,7 +45,7 @@ void TrafficLight::alternate()
 }
 void TrafficLight::show()
 {
-    wxString colorStr;
+    std::string colorStr;
     switch(color){
         case Green:
             colorStr = "green";
@@ -59,6 +57,5 @@ void TrafficLight::show()
             colorStr = "red";
             break;
     }
-
     std::cout << "Showing TrafficLight (" << colorStr << ") in arena " << getCurrentArena()  << std::endl;
 }

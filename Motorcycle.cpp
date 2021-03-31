@@ -1,5 +1,4 @@
 #include "Motorcycle.h"
-#include <iostream>     // std::cout, std::end
 
 int Motorcycle::count = 0;
 
@@ -14,7 +13,7 @@ Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint basePosition, 
 
 Motorcycle::~Motorcycle()
 {
-    count--;
+    //dtor
 }
 
 void Motorcycle::show(){

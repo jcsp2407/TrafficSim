@@ -1,5 +1,4 @@
 #include "Curb.h"
-#include <iostream>     // std::cout, std::end
 
 Curb::Curb(wxPoint basePosition, wxPoint offsetPosition, int arena): Entity(basePosition, offsetPosition, arena)
 {

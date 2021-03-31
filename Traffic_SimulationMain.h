@@ -10,57 +10,82 @@
 #ifndef TRAFFIC_SIMULATIONMAIN_H
 #define TRAFFIC_SIMULATIONMAIN_H
 
-//(*Headers(Traffic_SimulationFrame)
+//(*Headers(Simulation)
 #include <wx/frame.h>
 #include <wx/menu.h>
-#include <wx/msgdlg.h>
-#include <wx/statbmp.h>
 #include <wx/statusbr.h>
+#include <wx/dcbuffer.h>
+#include "Arena.h"
+#include "Entity.h"
+#include "Vehicle.h"
+#include "Car.h"
 //*)
 
-class Traffic_SimulationFrame: public wxFrame
+class Simulation: public wxFrame
 {
-	wxBitmap start_img; //main screen when loading program
-	wxBitmap end_img; //ending screen
-	wxBitmap bg_img; //main simulation background image
-
-    wxBitmap car_img; //generic car
-    wxBitmap truck_img; //generic truck img
-    wxBitmap MOTORCYCLE_img;//generic bike img
-
-    wxBitmap trafficlight_img; //static traffic light
-    wxBitmap streets_img; //might need to remove this, but static streets
-	wxBitmap ramp_img; //might need to remove this, but static streets
-
-	char turn;
-
     public:
 
-        Traffic_SimulationFrame(wxWindow* parent,wxWindowID id = -1);
-        virtual ~Traffic_SimulationFrame();
+        Simulation(wxWindow* parent,wxWindowID id = -1);
+        virtual ~Simulation();
+
+        int Getcars() { return cars; }
+        void Setcars(int val) { cars = val; }
+        int Getmotorcycles() { return motorcycles; }
+        void Setmotorcycles(int val) { motorcycles = val; }
+        int Gettrucks() { return trucks; }
+        void Settrucks(int val) { trucks = val; }
+        int GetarenasCnt() { return arenasCnt; }
+        void SetarenasCnt(int val) { arenasCnt = val; }
+        enum DriveModeType { Safe, Average, Crazy};      // declaring Safe, Average, and Crazy drive modes
+        DriveModeType Getmode() { return mode; }
+        void Setmode(DriveModeType val) { mode = val; }
+        bool Getramps() { return ramps; }
+        void Setramps(bool val) { ramps = val; }
+        int GetfullyStopped() { return fullyStopped; }
+        void IncfullyStopped() { fullyStopped++; }
+        int Getscore() { return score; }
+        void Incscore() { score++; }
+        bool start();
+        void stop();
 
     private:
 
+        int cars;
+        int motorcycles;
+        int trucks;
+        int arenasCnt;
+        DriveModeType mode;
+        bool ramps;
+        int fullyStopped;
+        int score;
+        Entity** obstacles;
+        Arena** arenas;
+        Entity** stationary;
+        Vehicle** vehicles;
         int speed;
 
-        //(*Handlers(Traffic_SimulationFrame)
+        wxBitmap car_img;
+        wxBitmap truck_img;
+        wxBitmap motorcycle_img;
+
+        //(*Handlers(Simulation)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
+        void OnTick(wxTimerEvent& event);
         void OnPaint(wxPaintEvent& event);
+        void OnEraseBackground(wxEraseEvent& event);
         //*)
 
-        //(*Identifiers(Traffic_SimulationFrame)
-        static const long ID_STATICBITMAP1;
+        //(*Identifiers(Simulation)
         static const long idMenuQuit;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
-        static const long ID_MESSAGEDIALOG1;
+        static const long ID_TIMER1;
         //*)
 
-        //(*Declarations(Traffic_SimulationFrame)
-        wxMessageDialog* MessageDialog1;
-        wxStaticBitmap* StaticBitmap1;
+        //(*Declarations(Simulation)
         wxStatusBar* StatusBar1;
+        wxTimer SimTimer;
         //*)
 
         DECLARE_EVENT_TABLE()

@@ -1,7 +1,5 @@
 #ifndef ENTITY_H
 #define ENTITY_H
-#include <wx/gdicmn.h>
-
 
 class Entity
 {

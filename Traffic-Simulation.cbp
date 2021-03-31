@@ -34,6 +34,8 @@
 		</Build>
 		<Compiler>
 			<Add option="`wx-config --cflags`" />
+			<Add option="-Winvalid-pch" />
+			<Add option="-include wx_pch.h" />
 			<Add option="-DWX_PRECOMP" />
 			<Add option="-Wall" />
 		</Compiler>
@@ -52,8 +54,6 @@
 		<Unit filename="Motorcycle.h" />
 		<Unit filename="Ramp.cpp" />
 		<Unit filename="Ramp.h" />
-		<Unit filename="Simulation.cpp" />
-		<Unit filename="Simulation.h" />
 		<Unit filename="TrafficLight.cpp" />
 		<Unit filename="TrafficLight.h" />
 		<Unit filename="Traffic_SimulationApp.cpp" />
@@ -64,6 +64,10 @@
 		<Unit filename="Truck.h" />
 		<Unit filename="Vehicle.cpp" />
 		<Unit filename="Vehicle.h" />
+		<Unit filename="wx_pch.h">
+			<Option compile="1" />
+			<Option weight="0" />
+		</Unit>
 		<Unit filename="wxsmith/Traffic_Simulationframe.wxs" />
 		<Extensions>
 			<wxsmith version="1">

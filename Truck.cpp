@@ -1,5 +1,4 @@
 #include "Truck.h"
-#include <iostream>
 
 int Truck::count = 0;
 
@@ -14,7 +13,7 @@ Truck::Truck(DirectionType direction, int lane, wxPoint basePosition, wxPoint of
 
 Truck::~Truck()
 {
-    count--;
+    //dtor
 }
 
 void Truck::show()
