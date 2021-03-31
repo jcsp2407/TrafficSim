@@ -1,23 +1,24 @@
-#include "Motorcycle.h"
+#include "Car.h"
 #include <iostream>     // std::cout, std::end
 
-int Motorcycle::count = 0;
+int Car::count = 0;
 
-Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint basePosition, wxPoint offsetPosition, int arena):
+Car::Car(DirectionType direction, int lane, wxPoint basePosition, wxPoint offsetPosition, int arena):
     Vehicle(direction, lane, basePosition, offsetPosition, arena)
 {
-    Setspeed(MOTORCYCLE);
+    Setspeed(CAR);
     // setLength(bitmap.length(x));
     // setWidth(bitmap.length(y));
     count++;
 }
 
-Motorcycle::~Motorcycle()
+Car::~Car()
 {
     count--;
 }
 
-void Motorcycle::show(){
+void Car::show()
+{
     std::string dirStr;
     switch(this->Getdirection()){
         case North:
@@ -33,9 +34,10 @@ void Motorcycle::show(){
             dirStr = "West";
             break;
     }
-    std::cout << "Showing Motorcycle heading (" << dirStr << ") in arena " << getCurrentArena() << std::endl;
+    std::cout << "Showing Car heading (" << dirStr << ") in arena " << getCurrentArena()  << std::endl;
 }
 
-bool Motorcycle::move(){
-    std::cout << "Moving Motorcycle with speed of" << Getspeed() << std::endl;
+bool Car::move()
+{
+    std::cout << "Moving Car with speed of" << Getspeed() << std::endl;
 }

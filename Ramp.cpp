@@ -1,4 +1,5 @@
 #include "Ramp.h"
+#include <iostream>     // std::cout, std::end
 
 Ramp::Ramp(bool ascending, wxPoint basePosition, wxPoint offsetPosition, int arena): Entity(basePosition, offsetPosition, arena)
 {

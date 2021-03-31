@@ -7,8 +7,8 @@
  * License:
  **************************************************************/
 
-#include "wx_pch.h"
 #include "Traffic_SimulationApp.h"
+#include <wx/wx.h>
 
 //(*AppHeaders
 #include "Traffic_SimulationMain.h"
@@ -25,7 +25,8 @@ bool Traffic_SimulationApp::OnInit()
     if ( wxsOK )
     {
     	Traffic_SimulationFrame* Frame = new Traffic_SimulationFrame(0);
-    	Frame->Show();
+    	Frame->Maximize(true);
+    	Frame->Show(true);
     	SetTopWindow(Frame);
     }
     //*)

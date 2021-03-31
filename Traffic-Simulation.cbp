@@ -34,8 +34,6 @@
 		</Build>
 		<Compiler>
 			<Add option="`wx-config --cflags`" />
-			<Add option="-Winvalid-pch" />
-			<Add option="-include wx_pch.h" />
 			<Add option="-DWX_PRECOMP" />
 			<Add option="-Wall" />
 		</Compiler>
@@ -66,10 +64,6 @@
 		<Unit filename="Truck.h" />
 		<Unit filename="Vehicle.cpp" />
 		<Unit filename="Vehicle.h" />
-		<Unit filename="wx_pch.h">
-			<Option compile="1" />
-			<Option weight="0" />
-		</Unit>
 		<Unit filename="wxsmith/Traffic_Simulationframe.wxs" />
 		<Extensions>
 			<wxsmith version="1">
