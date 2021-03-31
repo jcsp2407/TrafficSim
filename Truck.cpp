@@ -1,4 +1,5 @@
 #include "Truck.h"
+#include <iostream>
 
 int Truck::count = 0;
 

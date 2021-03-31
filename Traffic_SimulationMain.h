@@ -13,8 +13,9 @@
 //(*Headers(Traffic_SimulationFrame)
 #include <wx/frame.h>
 #include <wx/menu.h>
+#include <wx/msgdlg.h>
+#include <wx/statbmp.h>
 #include <wx/statusbr.h>
-#include "Simulation.h"
 //*)
 
 class Traffic_SimulationFrame: public wxFrame
@@ -26,9 +27,12 @@ class Traffic_SimulationFrame: public wxFrame
     wxBitmap car_img; //generic car
     wxBitmap truck_img; //generic truck img
     wxBitmap MOTORCYCLE_img;//generic bike img
+
     wxBitmap trafficlight_img; //static traffic light
     wxBitmap streets_img; //might need to remove this, but static streets
+	wxBitmap ramp_img; //might need to remove this, but static streets
 
+	char turn;
 
     public:
 
@@ -42,17 +46,21 @@ class Traffic_SimulationFrame: public wxFrame
         //(*Handlers(Traffic_SimulationFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
+        void OnPaint(wxPaintEvent& event);
         //*)
 
         //(*Identifiers(Traffic_SimulationFrame)
+        static const long ID_STATICBITMAP1;
         static const long idMenuQuit;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
+        static const long ID_MESSAGEDIALOG1;
         //*)
 
         //(*Declarations(Traffic_SimulationFrame)
+        wxMessageDialog* MessageDialog1;
+        wxStaticBitmap* StaticBitmap1;
         wxStatusBar* StatusBar1;
-        wxTimer SimTimer;
         //*)
 
         DECLARE_EVENT_TABLE()
