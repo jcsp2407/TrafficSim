@@ -19,6 +19,8 @@
 #include "Entity.h"
 #include "Vehicle.h"
 #include "Car.h"
+#include "Motorcycle.h"
+#include "TrafficLight.h"
 //*)
 
 class Simulation: public wxFrame
@@ -60,13 +62,16 @@ class Simulation: public wxFrame
         int score;
         Entity** obstacles;
         Arena** arenas;
-        Entity** stationary;
+        TrafficLight** lights;
         Vehicle** vehicles;
         int speed;
 
-        wxBitmap car_img;
-        wxBitmap truck_img;
-        wxBitmap motorcycle_img;
+        wxImage car_img;
+        wxImage truck_img;
+        wxImage motorcycle_img;
+        wxImage trafficRed_img;
+        wxImage trafficGreen_img;
+        wxImage trafficYellow_img;
 
         //(*Handlers(Simulation)
         void OnQuit(wxCommandEvent& event);

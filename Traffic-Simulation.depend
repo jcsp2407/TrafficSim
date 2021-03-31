@@ -1733,4 +1733,91 @@
 	"wx/dcclient.h"
 	"wx/window.h"
 
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/wx_pch.h
+	<wx/wxprec.h>
+	<wx/wx.h>
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Arena.cpp
+	"Arena.h"
+
+1617164445 /home/adrian/Downloads/Embedded-GUI-Project/Arena.h
+
+1617166147 source:/home/adrian/Downloads/Embedded-GUI-Project/Car.cpp
+	"Car.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Car.h
+	"Vehicle.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Vehicle.h
+	"Entity.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Entity.h
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Curb.cpp
+	"Curb.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Curb.h
+	"Entity.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Entity.cpp
+	"Entity.h"
+
+1617166587 source:/home/adrian/Downloads/Embedded-GUI-Project/Motorcycle.cpp
+	"Motorcycle.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Motorcycle.h
+	"Vehicle.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Ramp.cpp
+	"Ramp.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Ramp.h
+	"Entity.h"
+
+1617161650 source:/home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationApp.cpp
+	"wx_pch.h"
+	"Traffic_SimulationApp.h"
+	"Traffic_SimulationMain.h"
+	<wx/image.h>
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/wx_pch.h
+	<wx/wxprec.h>
+	<wx/wx.h>
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationApp.h
+	<wx/app.h>
+
+1617163121 /home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationMain.h
+	<wx/frame.h>
+	<wx/menu.h>
+	<wx/statusbr.h>
+	<wx/dcbuffer.h>
+	"Arena.h"
+	"Entity.h"
+	"Vehicle.h"
+	"Car.h"
+	"Motorcycle.h"
+	"TrafficLight.h"
+
+1617166532 source:/home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+	"wx_pch.h"
+	"Traffic_SimulationMain.h"
+	<wx/msgdlg.h>
+	<wx/intl.h>
+	<wx/string.h>
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/TrafficLight.cpp
+	"TrafficLight.h"
+
+1617163500 /home/adrian/Downloads/Embedded-GUI-Project/TrafficLight.h
+	"Entity.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Truck.cpp
+	"Truck.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Truck.h
+	"Vehicle.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Vehicle.cpp
+	"Vehicle.h"
 
