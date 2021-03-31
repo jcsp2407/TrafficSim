@@ -21,6 +21,7 @@ class Motorcycle : public Vehicle
 
     private:
         static int count;
+        static int total_count;
 };
 
 #endif // MOTORCYCLE_H

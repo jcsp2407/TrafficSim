@@ -21,6 +21,7 @@ class Car : public Vehicle
 
     private:
         static int count;
+        static int total_count;
 };
 
 #endif // CAR_H
