@@ -1719,87 +1719,87 @@
 1617071449 /home/adrian/eel4831/Traffic-Simulation/TrafficLight.h
 	"Entity.h"
 
-1617148571 source:/home/juan/Desktop/Embedded-GUI-Project/Arena.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Arena.cpp
 	"Arena.h"
 	<iostream>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Arena.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Arena.h
 	"Entity.h"
 	<vector>
 	<map>
 
-1617146394 /home/juan/Desktop/Embedded-GUI-Project/Entity.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Entity.h
 	<wx/gdicmn.h>
 
-1617146441 source:/home/juan/Desktop/Embedded-GUI-Project/Curb.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Curb.cpp
 	"Curb.h"
 	<iostream>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Curb.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Curb.h
 	"Entity.h"
 
-1617127335 source:/home/juan/Desktop/Embedded-GUI-Project/Entity.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Entity.cpp
 	"Entity.h"
 
-1617146444 source:/home/juan/Desktop/Embedded-GUI-Project/Ramp.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Ramp.cpp
 	"Ramp.h"
 	<iostream>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Ramp.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Ramp.h
 	"Entity.h"
 
-1617127335 source:/home/juan/Desktop/Embedded-GUI-Project/Simulation.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Simulation.cpp
 	"Simulation.h"
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Simulation.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Simulation.h
 	"Arena.h"
 	<vector>
 
-1617148613 source:/home/juan/Desktop/Embedded-GUI-Project/TrafficLight.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/TrafficLight.cpp
 	"TrafficLight.h"
 	<wx/msgdlg.h>
 	<iostream>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/TrafficLight.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/TrafficLight.h
 	"Entity.h"
 
-1617127335 source:/home/juan/Desktop/Embedded-GUI-Project/Vehicle.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Vehicle.cpp
 	"Vehicle.h"
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Vehicle.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Vehicle.h
 	"Entity.h"
 
-1617149593 source:/home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationApp.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationApp.cpp
 	"Traffic_SimulationApp.h"
 	<wx/wx.h>
 	"Traffic_SimulationMain.h"
 	<wx/image.h>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationApp.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationApp.h
 	<wx/app.h>
 
-1617145576 /home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationMain.h
+1617152746 /home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationMain.h
 	<wx/frame.h>
 	<wx/menu.h>
 	<wx/msgdlg.h>
 	<wx/statbmp.h>
 	<wx/statusbr.h>
 
-1617146436 source:/home/juan/Desktop/Embedded-GUI-Project/Car.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Car.cpp
 	"Car.h"
 	<iostream>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Car.h
+1617152821 /home/juan/Desktop/Embedded-GUI-Project/Car.h
 	"Vehicle.h"
 
-1617146450 source:/home/juan/Desktop/Embedded-GUI-Project/Motorcycle.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Motorcycle.cpp
 	"Motorcycle.h"
 	<iostream>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Motorcycle.h
+1617152821 /home/juan/Desktop/Embedded-GUI-Project/Motorcycle.h
 	"Vehicle.h"
 
-1617149858 source:/home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Traffic_SimulationMain.cpp
 	"Traffic_SimulationMain.h"
 	<wx/msgdlg.h>
 	<wx/wx.h>
@@ -1815,10 +1815,10 @@
 	"wx/dcclient.h"
 	"wx/window.h"
 
-1617148571 source:/home/juan/Desktop/Embedded-GUI-Project/Truck.cpp
+1617152746 source:/home/juan/Desktop/Embedded-GUI-Project/Truck.cpp
 	"Truck.h"
 	<iostream>
 
-1617127335 /home/juan/Desktop/Embedded-GUI-Project/Truck.h
+1617152821 /home/juan/Desktop/Embedded-GUI-Project/Truck.h
 	"Vehicle.h"
 
