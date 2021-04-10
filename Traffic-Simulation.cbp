@@ -54,8 +54,6 @@
 		<Unit filename="Motorcycle.h" />
 		<Unit filename="Ramp.cpp" />
 		<Unit filename="Ramp.h" />
-		<Unit filename="Simulation.cpp" />
-		<Unit filename="Simulation.h" />
 		<Unit filename="TrafficLight.cpp" />
 		<Unit filename="TrafficLight.h" />
 		<Unit filename="Traffic_SimulationApp.cpp" />

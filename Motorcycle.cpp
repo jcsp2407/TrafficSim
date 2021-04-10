@@ -36,5 +36,18 @@ void Motorcycle::show(){
 }
 
 bool Motorcycle::move(){
-    std::cout << "Moving Motorcycle with speed of" << Getspeed() << std::endl;
+        switch(Getdirection()){
+        case Vehicle::North:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y - 1));
+            break;
+        case Vehicle::South:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y + 1));
+            break;
+        case Vehicle::East:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x + 1, GetoffsetPosition().y));
+            break;
+        case Vehicle::West:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x - 1, GetoffsetPosition().y));
+            break;
+    }
 }

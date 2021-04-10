@@ -1641,7 +1641,7 @@
 1585059103 /usr/include/wx-3.0/wx/gtk/mdi.h
 	"wx/frame.h"
 
-1616947297 source:/home/adrian/eel4831/Traffic-Simulation/Traffic_SimulationApp.cpp
+1617136886 source:/home/adrian/eel4831/Traffic-Simulation/Traffic_SimulationApp.cpp
 	"wx_pch.h"
 	"Traffic_SimulationApp.h"
 	"Traffic_SimulationMain.h"
@@ -1654,13 +1654,17 @@
 1616947297 /home/adrian/eel4831/Traffic-Simulation/Traffic_SimulationApp.h
 	<wx/app.h>
 
-1616960404 /home/adrian/eel4831/Traffic-Simulation/Traffic_SimulationMain.h
+1617141363 /home/adrian/eel4831/Traffic-Simulation/Traffic_SimulationMain.h
 	<wx/frame.h>
 	<wx/menu.h>
 	<wx/statusbr.h>
-	"Simulation.h"
+	<wx/dcbuffer.h>
+	"Arena.h"
+	"Entity.h"
+	"Vehicle.h"
+	"Car.h"
 
-1616962418 source:/home/adrian/eel4831/Traffic-Simulation/Traffic_SimulationMain.cpp
+1617152220 source:/home/adrian/eel4831/Traffic-Simulation/Traffic_SimulationMain.cpp
 	"wx_pch.h"
 	"Traffic_SimulationMain.h"
 	<wx/msgdlg.h>
@@ -1670,22 +1674,17 @@
 1616949068 source:/home/adrian/eel4831/Traffic-Simulation/Simulation.cpp
 	"Simulation.h"
 
-1616960747 /home/adrian/eel4831/Traffic-Simulation/Simulation.h
-	"Arena.h"
-	<vector>
+1617136852 /home/adrian/eel4831/Traffic-Simulation/Simulation.h
 
-1616950394 source:/home/adrian/eel4831/Traffic-Simulation/Arena.cpp
+1617137922 source:/home/adrian/eel4831/Traffic-Simulation/Arena.cpp
 	"Arena.h"
 
-1616962359 /home/adrian/eel4831/Traffic-Simulation/Arena.h
-	"Entity.h"
-	<vector>
-	<map>
+1617137826 /home/adrian/eel4831/Traffic-Simulation/Arena.h
 
 1617069794 source:/home/adrian/eel4831/Traffic-Simulation/Entity.cpp
 	"Entity.h"
 
-1617070522 /home/adrian/eel4831/Traffic-Simulation/Entity.h
+1617140817 /home/adrian/eel4831/Traffic-Simulation/Entity.h
 
 1617070720 source:/home/adrian/eel4831/Traffic-Simulation/Vehicle.cpp
 	"Vehicle.h"
@@ -1693,39 +1692,220 @@
 1617070720 /home/adrian/eel4831/Traffic-Simulation/Vehicle.h
 	"Entity.h"
 
-1617071554 source:/home/adrian/eel4831/Traffic-Simulation/Car.cpp
+1617140817 source:/home/adrian/eel4831/Traffic-Simulation/Car.cpp
 	"Car.h"
 
-1617072471 /home/adrian/eel4831/Traffic-Simulation/Car.h
+1617140798 /home/adrian/eel4831/Traffic-Simulation/Car.h
 	"Vehicle.h"
 
-1617071554 source:/home/adrian/eel4831/Traffic-Simulation/Motorcycle.cpp
+1617072700 source:/home/adrian/eel4831/Traffic-Simulation/Motorcycle.cpp
 	"Motorcycle.h"
 
 1617071362 /home/adrian/eel4831/Traffic-Simulation/Motorcycle.h
 	"Vehicle.h"
 
-1616957150 source:/home/adrian/eel4831/Traffic-Simulation/Truck.cpp
+1617072700 source:/home/adrian/eel4831/Traffic-Simulation/Truck.cpp
 	"Truck.h"
 
-1616957150 /home/adrian/eel4831/Traffic-Simulation/Truck.h
+1617072471 /home/adrian/eel4831/Traffic-Simulation/Truck.h
 	"Vehicle.h"
 
-1617071491 source:/home/adrian/eel4831/Traffic-Simulation/Ramp.cpp
+1617072700 source:/home/adrian/eel4831/Traffic-Simulation/Ramp.cpp
 	"Ramp.h"
 
 1617071435 /home/adrian/eel4831/Traffic-Simulation/Ramp.h
 	"Entity.h"
 
-1617070616 source:/home/adrian/eel4831/Traffic-Simulation/Curb.cpp
+1617072700 source:/home/adrian/eel4831/Traffic-Simulation/Curb.cpp
 	"Curb.h"
 
 1617070616 /home/adrian/eel4831/Traffic-Simulation/Curb.h
 	"Entity.h"
 
-1617071554 source:/home/adrian/eel4831/Traffic-Simulation/TrafficLight.cpp
+1617072700 source:/home/adrian/eel4831/Traffic-Simulation/TrafficLight.cpp
 	"TrafficLight.h"
 
 1617071449 /home/adrian/eel4831/Traffic-Simulation/TrafficLight.h
 	"Entity.h"
+
+1585059103 /usr/include/wx-3.0/wx/dcbuffer.h
+	"wx/dcmemory.h"
+	"wx/dcclient.h"
+	"wx/window.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/wx_pch.h
+	<wx/wxprec.h>
+	<wx/wx.h>
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Arena.cpp
+	"Arena.h"
+
+1617164445 /home/adrian/Downloads/Embedded-GUI-Project/Arena.h
+
+1617166147 source:/home/adrian/Downloads/Embedded-GUI-Project/Car.cpp
+	"Car.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Car.h
+	"Vehicle.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Vehicle.h
+	"Entity.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Entity.h
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Curb.cpp
+	"Curb.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Curb.h
+	"Entity.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Entity.cpp
+	"Entity.h"
+
+1617166587 source:/home/adrian/Downloads/Embedded-GUI-Project/Motorcycle.cpp
+	"Motorcycle.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Motorcycle.h
+	"Vehicle.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Ramp.cpp
+	"Ramp.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Ramp.h
+	"Entity.h"
+
+1617161650 source:/home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationApp.cpp
+	"wx_pch.h"
+	"Traffic_SimulationApp.h"
+	"Traffic_SimulationMain.h"
+	<wx/image.h>
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/wx_pch.h
+	<wx/wxprec.h>
+	<wx/wx.h>
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationApp.h
+	<wx/app.h>
+
+1617163121 /home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationMain.h
+	<wx/frame.h>
+	<wx/menu.h>
+	<wx/statusbr.h>
+	<wx/dcbuffer.h>
+	"Arena.h"
+	"Entity.h"
+	"Vehicle.h"
+	"Car.h"
+	"Motorcycle.h"
+	"TrafficLight.h"
+
+1617166532 source:/home/adrian/Downloads/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+	"wx_pch.h"
+	"Traffic_SimulationMain.h"
+	<wx/msgdlg.h>
+	<wx/intl.h>
+	<wx/string.h>
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/TrafficLight.cpp
+	"TrafficLight.h"
+
+1617163500 /home/adrian/Downloads/Embedded-GUI-Project/TrafficLight.h
+	"Entity.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Truck.cpp
+	"Truck.h"
+
+1617157477 /home/adrian/Downloads/Embedded-GUI-Project/Truck.h
+	"Vehicle.h"
+
+1617157477 source:/home/adrian/Downloads/Embedded-GUI-Project/Vehicle.cpp
+	"Vehicle.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/wx_pch.h
+	<wx/wxprec.h>
+	<wx/wx.h>
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Arena.cpp
+	"Arena.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Arena.h
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Car.cpp
+	"Car.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Car.h
+	"Vehicle.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Vehicle.h
+	"Entity.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Entity.h
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Curb.cpp
+	"Curb.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Curb.h
+	"Entity.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Entity.cpp
+	"Entity.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Motorcycle.cpp
+	"Motorcycle.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Motorcycle.h
+	"Vehicle.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Ramp.cpp
+	"Ramp.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Ramp.h
+	"Entity.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Traffic_SimulationApp.cpp
+	"wx_pch.h"
+	"Traffic_SimulationApp.h"
+	"Traffic_SimulationMain.h"
+	<wx/image.h>
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/wx_pch.h
+	<wx/wxprec.h>
+	<wx/wx.h>
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Traffic_SimulationApp.h
+	<wx/app.h>
+
+1618013443 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Traffic_SimulationMain.h
+	<wx/frame.h>
+	<wx/menu.h>
+	<wx/statusbr.h>
+	<wx/dcbuffer.h>
+	"Arena.h"
+	"Entity.h"
+	"Vehicle.h"
+	"Car.h"
+	"Motorcycle.h"
+	"TrafficLight.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/TrafficLight.h
+	"Entity.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/TrafficLight.cpp
+	"TrafficLight.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Truck.cpp
+	"Truck.h"
+
+1617168342 /home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Truck.h
+	"Vehicle.h"
+
+1617168342 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Vehicle.cpp
+	"Vehicle.h"
+
+1618014275 source:/home/hippo/Desktop/EmbeddedGUI/GroupProject_TrafficSim/Embedded-GUI-Project-Adrian/Traffic_SimulationMain.cpp
+	"wx_pch.h"
+	"Traffic_SimulationMain.h"
+	<wx/msgdlg.h>
+	<wx/intl.h>
+	<wx/string.h>
 
