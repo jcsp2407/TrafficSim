@@ -78,8 +78,6 @@ void wxImagePanel::paintNow()
 void wxImagePanel::render(wxDC&  dc)
 {
     int neww, newh;
-//	neww= 480;
-//    newh= 272;
     dc.GetSize( &neww, &newh );
 
     if( neww != w || newh != h )

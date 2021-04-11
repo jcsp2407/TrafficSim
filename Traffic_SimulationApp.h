@@ -11,13 +11,9 @@
 #define TRAFFIC_SIMULATIONAPP_H
 
 #include <wx/app.h>
-#include "MyBGPanels.h"
 
 class Traffic_SimulationApp : public wxApp
 {
-//	wxFrame *frame;
-//	wxImagePanel *drawPane;
-
     public:
         virtual bool OnInit();
 };

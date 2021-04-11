@@ -91,6 +91,15 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     Connect( wxID_ANY,wxEVT_ERASE_BACKGROUND,( wxObjectEventFunction )&Simulation::OnEraseBackground );
     //*)
 
+	wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+	startframe = new wxFrame(NULL, wxID_ANY, wxT("Traffic Sim"), wxPoint(50,50), wxSize(800,600));
+	startpanel = new wxImagePanel( startframe, wxT("NEWSTART.jpg"), wxBITMAP_TYPE_JPEG);
+	sizer->Add(startpanel, 1, wxEXPAND);
+	startframe->SetSizer(sizer);
+	startframe->Show();
+	startpanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&Simulation::OnClickToStart,0,this);
+
+
     car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
     truck_img.LoadFile( wxT( "truck.png" ), wxBITMAP_TYPE_PNG );
     motorcycle_img.LoadFile( wxT( "bike.png" ), wxBITMAP_TYPE_PNG );
@@ -113,13 +122,14 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     SimTimer.SetOwner( this, ID_TIMER1 );
     SimTimer.Start( 10, false );
 
-    arenas = new Arena*[10];
+
+    arenaframe = new wxFrame(NULL, wxID_ANY, wxT("Arenas"), wxPoint(50,50), wxSize(800,600));
+	arenapanel = new wxPanel(this, ID_TESTPANEL, wxPoint(0,0), wxSize(800,600), wxTAB_TRAVERSAL, _T("Start Panel"));
+	arenas = new Arena*[10];
     arenas[0] = new Arena(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600), wxTAB_TRAVERSAL, _T("Arena 0"));
+	arenapanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&Simulation::OnClickToStart,0,this);
 
-	starpanel = new wxPanel(this, ID_TESTPANEL, wxPoint(0,0), wxSize(800,600), wxTAB_TRAVERSAL, _T("Start Panel"));
-	starpanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&Simulation::OnClickToStart,0,this);
-
-
+//create event handler for new panel, make it show->false and then show->true new panel.
 
     //arenas[0]->SetBackgroundColour(wxColour(* wxLIGHT_GREY));
 
@@ -132,7 +142,6 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     vehicles[1] = new Motorcycle(Vehicle::East, 1, arenas[0]->GetPosition(), wxPoint(0, 50), 1);
 
     lights = new TrafficLight*[3];
-
     lights[0] = new TrafficLight(TrafficLight::Green, arenas[0]->GetPosition(), wxPoint(500, 20), 1);
 
     screenState = state::startScreen;
@@ -171,12 +180,12 @@ void Simulation::OnPaint( wxPaintEvent& event )
         {
 //        wxClientDC dc(arenas[0]);
 //
-		wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-//		Traffic_SimulationApp::frame = new wxFrame(NULL, wxID_ANY, wxT("Hello wxDC"), wxPoint(50,50), wxSize(800,600));
-//		Traffic_SimulationApp::drawPane = new wxImagePanel( frame, wxT("NEWSTART.jpg"), wxBITMAP_TYPE_JPEG);
-		sizer->Add(drawPane, 1, wxEXPAND);
-		Frame->SetSizer(sizer);
-		Frame->Show();
+//		wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+////		Traffic_SimulationApp::frame = new wxFrame(NULL, wxID_ANY, wxT("Hello wxDC"), wxPoint(50,50), wxSize(800,600));
+////		Traffic_SimulationApp::drawPane = new wxImagePanel( frame, wxT("NEWSTART.jpg"), wxBITMAP_TYPE_JPEG);
+//		sizer->Add(drawPane, 1, wxEXPAND);
+//		Frame->SetSizer(sizer);
+//		Frame->Show();
         }
             break;
 
@@ -311,7 +320,10 @@ void Simulation::OnTick( wxTimerEvent& event )
 
 void Simulation::OnClickToStart(wxMouseEvent& event)
 {
+	startframe->Show(false);
     screenState = state::runningScreen;
+    arenaframe->Show(true);
+
 }
 
 bool Simulation::start()

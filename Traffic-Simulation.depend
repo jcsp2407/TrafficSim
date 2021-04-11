@@ -1946,7 +1946,7 @@
 1618152362 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Ramp.h
 	"Entity.h"
 
-1618165192 source:/home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationApp.cpp
+1618168381 source:/home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationApp.cpp
 	"wx_pch.h"
 	"Traffic_SimulationApp.h"
 	"Traffic_SimulationMain.h"
@@ -1956,12 +1956,12 @@
 	<wx/wxprec.h>
 	<wx/wx.h>
 
-1618165192 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationApp.h
+1618166801 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationApp.h
 	<wx/app.h>
-	"MyBGPanels.h"
 
-1618164380 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationMain.h
+1618167906 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationMain.h
 	"Traffic_SimulationApp.h"
+	"MyBGPanels.h"
 	<wx/frame.h>
 	<wx/menu.h>
 	<wx/statusbr.h>
@@ -1976,7 +1976,7 @@
 1618152362 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/TrafficLight.h
 	"Entity.h"
 
-1618164380 source:/home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+1618168628 source:/home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/Traffic_SimulationMain.cpp
 	"wx_pch.h"
 	"Traffic_SimulationMain.h"
 	<wx/msgdlg.h>
@@ -1999,10 +1999,10 @@
 	<wx/wxprec.h>
 	<wx/wx.h>
 
-1618163198 source:/home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/MyBGPanels.cpp
+1618166801 source:/home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/MyBGPanels.cpp
 	"MyBGPanels.h"
 
-1618156773 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/MyBGPanels.h
+1618165593 /home/juan/Desktop/Embedded-GUI-Project/p3/Embedded-GUI-Project/MyBGPanels.h
 	<wx/wx.h>
 	<wx/sizer.h>
 

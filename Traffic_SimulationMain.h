@@ -10,6 +10,8 @@
 #ifndef TRAFFIC_SIMULATIONMAIN_H
 #define TRAFFIC_SIMULATIONMAIN_H
 #include "Traffic_SimulationApp.h"
+#include "MyBGPanels.h"
+
 //(*Headers(Simulation)
 #include <wx/frame.h>
 #include <wx/menu.h>
@@ -50,8 +52,7 @@ class Simulation: public wxFrame
         void Incscore() { score++; }
         bool start();
         void stop();
-        //friend void wxImagePanel::SetState(int a);
-		enum state {startScreen, settingsScreen, runningScreen, endScreen};
+
 
     private:
 
@@ -67,15 +68,24 @@ class Simulation: public wxFrame
         Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;
-        wxPanel *startframe;
-
-        wxPanel *test;
-		wxPanel *starpanel;
-		wxPanel *configpanel;
-		wxPanel *endpanel;
 
         int speed;
         int screenState;
+		enum state {startScreen, settingsScreen, runningScreen, endScreen};
+
+		wxImagePanel *bgimg;
+
+		wxFrame * startframe;
+		wxFrame * configframe;
+		wxFrame * arenaframe;
+		wxFrame * endframe;
+
+        wxPanel * test;
+		wxImagePanel * startpanel;
+		wxPanel * configpanel;
+		wxPanel * arenapanel;
+		wxImagePanel * endpanel;
+
 
         wxImage car_img;
         wxImage truck_img;
