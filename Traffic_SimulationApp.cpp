@@ -9,6 +9,7 @@
 
 #include "wx_pch.h"
 #include "Traffic_SimulationApp.h"
+//#include "MyBGPanels.h"
 
 //(*AppHeaders
 #include "Traffic_SimulationMain.h"
@@ -24,9 +25,21 @@ bool Traffic_SimulationApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
+
+//		wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+//        frame = new wxFrame(NULL, wxID_ANY, wxT("Hello wxDC"), wxPoint(50,50), wxSize(800,600));
+//        // then simply create like this
+//        drawPane = new wxImagePanel( frame, wxT("NEWSTART.jpg"), wxBITMAP_TYPE_JPEG);
+//        sizer->Add(drawPane, 1, wxEXPAND);
+//        frame->SetSizer(sizer);
+//        frame->Show();
+
     	Simulation* Frame = new Simulation(0);
+    	Frame->SetInitialSize(wxSize(480,272));
+    	Frame->SetTitle(_T("Traffic Sim"));
+  //  	Frame->Maximize();
     	Frame->Show();
-    	SetTopWindow(Frame);
+	 	SetTopWindow(Frame);
     }
     //*)
     return wxsOK;

@@ -9,7 +9,7 @@
 
 #ifndef TRAFFIC_SIMULATIONMAIN_H
 #define TRAFFIC_SIMULATIONMAIN_H
-
+#include "Traffic_SimulationApp.h"
 //(*Headers(Simulation)
 #include <wx/frame.h>
 #include <wx/menu.h>
@@ -19,6 +19,9 @@
 #include "Entity.h"
 #include "Vehicle.h"
 #include "Car.h"
+#include "Motorcycle.h"
+#include "TrafficLight.h"
+
 //*)
 
 class Simulation: public wxFrame
@@ -47,6 +50,8 @@ class Simulation: public wxFrame
         void Incscore() { score++; }
         bool start();
         void stop();
+        //friend void wxImagePanel::SetState(int a);
+		enum state {startScreen, settingsScreen, runningScreen, endScreen};
 
     private:
 
@@ -60,13 +65,30 @@ class Simulation: public wxFrame
         int score;
         Entity** obstacles;
         Arena** arenas;
-        Entity** stationary;
+        TrafficLight** lights;
         Vehicle** vehicles;
-        int speed;
+        wxPanel *startframe;
 
-        wxBitmap car_img;
-        wxBitmap truck_img;
-        wxBitmap motorcycle_img;
+        wxPanel *test;
+		wxPanel *starpanel;
+		wxPanel *configpanel;
+		wxPanel *endpanel;
+
+        int speed;
+        int screenState;
+
+        wxImage car_img;
+        wxImage truck_img;
+        wxImage motorcycle_img;
+        wxImage trafficRed_img;
+        wxImage trafficGreen_img;
+        wxImage trafficYellow_img;
+        wxImage start_img;
+        wxImage traffic_img;
+        wxImage sim_img;
+        wxImage clicktostart_img;
+
+        wxFont startScreenFont;
 
         //(*Handlers(Simulation)
         void OnQuit(wxCommandEvent& event);
@@ -74,6 +96,7 @@ class Simulation: public wxFrame
         void OnTick(wxTimerEvent& event);
         void OnPaint(wxPaintEvent& event);
         void OnEraseBackground(wxEraseEvent& event);
+        void OnClickToStart(wxMouseEvent& event);
         //*)
 
         //(*Identifiers(Simulation)
@@ -81,6 +104,7 @@ class Simulation: public wxFrame
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         static const long ID_TIMER1;
+        static const long ID_TESTPANEL;
         //*)
 
         //(*Declarations(Simulation)

@@ -16,6 +16,7 @@
 #include <wx/string.h>
 //*)
 
+
 //helper functions
 enum wxbuildinfoformat {
     short_f, long_f };
@@ -47,11 +48,13 @@ const long Simulation::idMenuQuit = wxNewId();
 const long Simulation::idMenuAbout = wxNewId();
 const long Simulation::ID_STATUSBAR1 = wxNewId();
 const long Simulation::ID_TIMER1 = wxNewId();
+const long Simulation::ID_TESTPANEL = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(Simulation,wxFrame)
     //(*EventTable(Simulation)
     //*)
+
 END_EVENT_TABLE()
 
 Simulation::Simulation(wxWindow* parent,wxWindowID id)
@@ -88,16 +91,36 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     Connect( wxID_ANY,wxEVT_ERASE_BACKGROUND,( wxObjectEventFunction )&Simulation::OnEraseBackground );
     //*)
 
-    car_img.LoadFile( wxT( "car.png" ), wxBITMAP_TYPE_PNG );
+    car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
     truck_img.LoadFile( wxT( "truck.png" ), wxBITMAP_TYPE_PNG );
-    motorcycle_img.LoadFile( wxT( "motorcycle.png" ), wxBITMAP_TYPE_PNG );
+    motorcycle_img.LoadFile( wxT( "bike.png" ), wxBITMAP_TYPE_PNG );
+    trafficRed_img.LoadFile( wxT( "red.png" ), wxBITMAP_TYPE_PNG );
+    trafficYellow_img.LoadFile( wxT( "yellow.png" ), wxBITMAP_TYPE_PNG );
+    trafficGreen_img.LoadFile( wxT( "green.png" ), wxBITMAP_TYPE_PNG );
+    start_img.LoadFile( wxT("start_img.jpg"), wxBITMAP_TYPE_ANY);
+    traffic_img.LoadFile( wxT("Traffic.png"), wxBITMAP_TYPE_PNG);
+    sim_img.LoadFile( wxT("Sim.png"), wxBITMAP_TYPE_PNG);
+    clicktostart_img.LoadFile( wxT("Clicktostart.png"), wxBITMAP_TYPE_PNG);
+
+    clicktostart_img.SetMaskColour(50,50,50);
+    car_img = car_img.Rescale(100, 50);
+    motorcycle_img = motorcycle_img.Rotate90().ShrinkBy(2,2);
+    trafficGreen_img = trafficGreen_img.Rescale(10,25);
+    trafficRed_img = trafficRed_img.Rescale(10,25);
+    trafficYellow_img = trafficYellow_img.Rescale(10,25);
+    start_img = start_img.Rescale(800, 600);
 
     SimTimer.SetOwner( this, ID_TIMER1 );
     SimTimer.Start( 10, false );
 
     arenas = new Arena*[10];
+    arenas[0] = new Arena(this, wxID_ANY, wxDefaultPosition, wxSize(800, 600), wxTAB_TRAVERSAL, _T("Arena 0"));
 
-    arenas[0] = new Arena(this, wxID_ANY, wxDefaultPosition, wxSize(500, 500), wxTAB_TRAVERSAL, _T("Arena 0"));
+	starpanel = new wxPanel(this, ID_TESTPANEL, wxPoint(0,0), wxSize(800,600), wxTAB_TRAVERSAL, _T("Start Panel"));
+	starpanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&Simulation::OnClickToStart,0,this);
+
+
+
     //arenas[0]->SetBackgroundColour(wxColour(* wxLIGHT_GREY));
 
 
@@ -105,8 +128,14 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     vehicles = new Vehicle*[10];
 
-    vehicles[0] = new Car(Vehicle::North, 1, arenas[0]->GetPosition(), wxPoint(0,0), 1);
+    vehicles[0] = new Car(Vehicle::East, 1, arenas[0]->GetPosition(), wxPoint(0,0), 1);
+    vehicles[1] = new Motorcycle(Vehicle::East, 1, arenas[0]->GetPosition(), wxPoint(0, 50), 1);
 
+    lights = new TrafficLight*[3];
+
+    lights[0] = new TrafficLight(TrafficLight::Green, arenas[0]->GetPosition(), wxPoint(500, 20), 1);
+
+    screenState = state::startScreen;
 }
 
 Simulation::~Simulation()
@@ -132,13 +161,82 @@ void Simulation::OnEraseBackground( wxEraseEvent& event )
 
 void Simulation::OnPaint( wxPaintEvent& event )
 {
-    wxClientDC dc(arenas[0]);
 
-//    dc.BeginDrawing(  );
+  //  wxClientDC dc(arenas[0]);
 
-    dc.DrawBitmap( car_img, vehicles[0]->GetbasePosition(), true);
-    dc.DrawBitmap( motorcycle_img, vehicles[0]->GetbasePosition(), true);
-   // dc.DrawBitmap( paddle_img, int( paddle[0].x ), int( paddle[0].y ), true );
+ //   dc.BeginDrawing(  );
+
+    switch (screenState){
+        case state::startScreen:
+        {
+//        wxClientDC dc(arenas[0]);
+//
+		wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+//		Traffic_SimulationApp::frame = new wxFrame(NULL, wxID_ANY, wxT("Hello wxDC"), wxPoint(50,50), wxSize(800,600));
+//		Traffic_SimulationApp::drawPane = new wxImagePanel( frame, wxT("NEWSTART.jpg"), wxBITMAP_TYPE_JPEG);
+		sizer->Add(drawPane, 1, wxEXPAND);
+		Frame->SetSizer(sizer);
+		Frame->Show();
+        }
+            break;
+
+		case state::settingsScreen:
+		{
+
+		}
+			break;
+
+        case state::runningScreen:
+        {
+            //delete test;
+            wxClientDC dc(arenas[0]);
+
+            dc.DrawBitmap( car_img, vehicles[0]->GetoffsetPosition(), true);
+            dc.DrawBitmap( motorcycle_img, vehicles[1]->GetoffsetPosition(), true);
+
+            switch(lights[0]->Getcolor())
+            {
+                case TrafficLight::Green:
+                    dc.DrawBitmap( trafficGreen_img, lights[0]->GetoffsetPosition(), true);
+                    break;
+                case TrafficLight::Yellow:
+                    dc.DrawBitmap( trafficYellow_img, lights[0]->GetoffsetPosition(), true);
+                    break;
+                case TrafficLight::Red:
+                    dc.DrawBitmap( trafficRed_img, lights[0]->GetoffsetPosition(), true);
+                    break;
+            }
+        }
+            break;
+		case state::endScreen:
+		{
+		}
+			break;
+
+        default:
+            break;
+    }
+
+
+
+
+
+    /*
+    dc.DrawBitmap( car_img, vehicles[0]->GetoffsetPosition(), true);
+    dc.DrawBitmap( motorcycle_img, vehicles[1]->GetoffsetPosition(), true);
+
+    switch(lights[0]->Getcolor()){
+        case TrafficLight::Green:
+            dc.DrawBitmap( trafficGreen_img, lights[0]->GetoffsetPosition(), true);
+            break;
+        case TrafficLight::Yellow:
+            dc.DrawBitmap( trafficYellow_img, lights[0]->GetoffsetPosition(), true);
+            break;
+        case TrafficLight::Red:
+            dc.DrawBitmap( trafficRed_img, lights[0]->GetoffsetPosition(), true);
+            break;
+    }
+    */
     //dc.DrawBitmap( paddle_img, int( paddle[1].x ), int( paddle[1].y ), true );
     //dc.DrawBitmap( ball_img, int( ball.x ), int( ball.y ), true );
 
@@ -160,8 +258,60 @@ void Simulation::OnTick( wxTimerEvent& event )
 
 	// Computations
 
+	switch (screenState){
+        case state::startScreen:
+            {
+            }
+            break;
 
+		case state::settingsScreen:
+			break;
+
+        case state::runningScreen:
+        {
+            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[0]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[0]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x && vehicles[0]->GetoffsetPosition().x < arenas[0]->GetSize().GetWidth() - 100)){
+                vehicles[0]->move();
+            }
+
+            if(vehicles[1]->GetoffsetPosition().x == lights[0]->GetoffsetPosition().x){
+                motorcycle_img = motorcycle_img.Rotate90();
+                vehicles[1]->move();
+                vehicles[1]->Setdirection(Vehicle::South);
+            }
+
+            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[1]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[1]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x && vehicles[1]->GetoffsetPosition().y < arenas[0]->GetSize().GetHeight() - 100)){
+                vehicles[1]->move();
+            }
+        }
+        break;
+
+        case state::endScreen:
+			break;
+	}
+
+    /*lights[0]->alternate();
+
+    if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[0]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[0]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x && vehicles[0]->GetoffsetPosition().x < arenas[0]->GetSize().GetWidth() - 100)){
+        vehicles[0]->move();
+    }
+
+    if(vehicles[1]->GetoffsetPosition().x == lights[0]->GetoffsetPosition().x){
+        motorcycle_img = motorcycle_img.Rotate90();
+        vehicles[1]->move();
+        vehicles[1]->Setdirection(Vehicle::South);
+    }
+
+    if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[1]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[1]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x && vehicles[1]->GetoffsetPosition().y < arenas[0]->GetSize().GetHeight() - 100)){
+        vehicles[1]->move();
+    }
+
+    */
     this->Refresh();
+}
+
+void Simulation::OnClickToStart(wxMouseEvent& event)
+{
+    screenState = state::runningScreen;
 }
 
 bool Simulation::start()
@@ -173,3 +323,4 @@ void Simulation::stop()
 {
 
 }
+
