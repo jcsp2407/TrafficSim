@@ -64,10 +64,12 @@ class Simulation: public wxFrame
         Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;
-        wxPanel *test;
         int speed;
         int screenState;
         enum state {startScreen, settingsScreen, runningScreen, endScreen};
+
+        wxPanel *startPanel;
+        wxPanel *settingsPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -89,6 +91,7 @@ class Simulation: public wxFrame
         void OnPaint(wxPaintEvent& event);
         void OnEraseBackground(wxEraseEvent& event);
         void OnClickToStart(wxMouseEvent& event);
+        void OnBeginButton(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(Simulation)
@@ -96,12 +99,15 @@ class Simulation: public wxFrame
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         static const long ID_TIMER1;
-        static const long ID_TESTPANEL;
+        static const long ID_STARTPANEL;
+        static const long ID_SETTINGSPANEL;
+        static const long ID_BEGINBUTTON;
         //*)
 
         //(*Declarations(Simulation)
         wxStatusBar* StatusBar1;
         wxTimer SimTimer;
+        wxButton* beginButton;
         //*)
 
         DECLARE_EVENT_TABLE()
