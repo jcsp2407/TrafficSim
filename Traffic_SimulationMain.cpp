@@ -7,8 +7,10 @@
  * License:
  **************************************************************/
 
-#include "wx_pch.h"
 #include "Traffic_SimulationMain.h"
+#include "Arena.h"
+#include "Traffic_SimulationApp.h"
+#include "wx_pch.h"
 #include <wx/msgdlg.h>
 
 //(*InternalHeaders(Simulation)
@@ -56,8 +58,12 @@ const long Simulation::ID_BEGINBUTTON = wxNewId();
 BEGIN_EVENT_TABLE(Simulation,wxFrame)
     //(*EventTable(Simulation)
     //*)
-
+    //EVT_SIZE()
 END_EVENT_TABLE()
+
+
+Arena** arenas;
+
 
 Simulation::Simulation(wxWindow* parent,wxWindowID id)
 {
@@ -79,12 +85,12 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     Menu2->Append(MenuItem2);
     MenuBar1->Append(Menu2, _("Help"));
     SetMenuBar(MenuBar1);
-    StatusBar1 = new wxStatusBar(this, ID_STATUSBAR1, 0, _T("ID_STATUSBAR1"));
-    int __wxStatusBarWidths_1[1] = { -1 };
-    int __wxStatusBarStyles_1[1] = { wxSB_NORMAL };
-    StatusBar1->SetFieldsCount(1,__wxStatusBarWidths_1);
-    StatusBar1->SetStatusStyles(1,__wxStatusBarStyles_1);
-    SetStatusBar(StatusBar1);
+//    StatusBar1 = new wxStatusBar(this, ID_STATUSBAR1, 0, _T("ID_STATUSBAR1"));
+//    int __wxStatusBarWidths_1[1] = { -1 };
+//    int __wxStatusBarStyles_1[1] = { wxSB_NORMAL };
+//    StatusBar1->SetFieldsCount(1,__wxStatusBarWidths_1);
+//    StatusBar1->SetStatusStyles(1,__wxStatusBarStyles_1);
+//    SetStatusBar(StatusBar1);
 
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&Simulation::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&Simulation::OnAbout);
@@ -104,10 +110,11 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     trafficRed_img.LoadFile( wxT( "red.png" ), wxBITMAP_TYPE_PNG );
     trafficYellow_img.LoadFile( wxT( "yellow.png" ), wxBITMAP_TYPE_PNG );
     trafficGreen_img.LoadFile( wxT( "green.png" ), wxBITMAP_TYPE_PNG );
-    start_img.LoadFile( wxT("start_img.jpg"), wxBITMAP_TYPE_ANY);
-    traffic_img.LoadFile( wxT("Traffic.png"), wxBITMAP_TYPE_PNG);
-    sim_img.LoadFile( wxT("Sim.png"), wxBITMAP_TYPE_PNG);
-    clicktostart_img.LoadFile( wxT("Clicktostart.png"), wxBITMAP_TYPE_PNG);
+    start_img.LoadFile( wxT("NEWSTART.jpg"), wxBITMAP_TYPE_ANY);
+    //traffic_img.LoadFile( wxT("Traffic.png"), wxBITMAP_TYPE_PNG);
+    //sim_img.LoadFile( wxT("Sim.png"), wxBITMAP_TYPE_PNG);
+    //clicktostart_img.LoadFile( wxT("Clicktostart.png"), wxBITMAP_TYPE_PNG);
+
 
     //Re-scaling images
     car_img = car_img.Rescale(100, 50);
@@ -115,13 +122,15 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     trafficGreen_img = trafficGreen_img.Rescale(10,25);
     trafficRed_img = trafficRed_img.Rescale(10,25);
     trafficYellow_img = trafficYellow_img.Rescale(10,25);
-    start_img = start_img.Rescale(800, 540);
+    //start_img = start_img.Rescale(800, 540);
 
     //Panels
+    wxBoxSizer* BoxSizer1;
     arenas = new Arena*[10];
     arenas[0] = new Arena(this, wxID_ANY, wxDefaultPosition, wxSize(800, 540), wxTAB_TRAVERSAL, _T("Arena 0"));
-    settingsPanel = new wxPanel(this, ID_SETTINGSPANEL, wxDefaultPosition, wxSize(800, 540), wxTAB_TRAVERSAL, _T("Arena 0"));
-    startPanel = new wxPanel(this, ID_STARTPANEL, wxDefaultPosition, wxSize(800,540), wxTAB_TRAVERSAL, _T("Start Panel"));
+    BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
+    settingsPanel = new wxPanel(this, ID_SETTINGSPANEL, wxDefaultPosition, wxSize(800, 540), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Arena 0"));
+    startPanel = new wxPanel(this, ID_STARTPANEL, wxDefaultPosition, wxSize(800,540), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Start Panel"));
     startPanel->Hide();
     arenas[0]->Hide();
     settingsPanel->Hide();
@@ -137,6 +146,12 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     //Misc
     beginButton = new wxButton(settingsPanel, ID_BEGINBUTTON, _("Begin"), wxPoint(300,420), wxSize(184,34), 0, wxDefaultValidator, _T("ID_URLBUTTON"));
     screenState = state::startScreen;
+    //BoxSizer1->Add(arenas[0], 1, wxALL|wxEXPAND, 5);
+    //BoxSizer1->Add(settingsPanel, 1, wxALL|wxEXPAND, 5);
+    BoxSizer1->Add(startPanel, 1, wxALL|wxEXPAND, 0);
+    SetSizer(BoxSizer1);
+    BoxSizer1->Fit(this);
+    BoxSizer1->SetSizeHints(this);
 
     //Event Handlers
     startPanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&Simulation::OnClickToStart,0,this);
@@ -170,16 +185,20 @@ void Simulation::OnPaint( wxPaintEvent& event )
     switch (screenState){
         case state::startScreen:
         {
+            wxBitmap resized;
             settingsPanel->Hide();
             arenas[0]->Hide();
             startPanel->Show();
 
             wxClientDC dc(startPanel);
 
-            dc.DrawBitmap(start_img,wxPoint(0,0), true);
-            dc.DrawBitmap(traffic_img, wxPoint(100,25), true);
-            dc.DrawBitmap(sim_img, wxPoint(350, 150), true);
-            dc.DrawBitmap(clicktostart_img, wxPoint(160,420),true);
+            //start_img = start_img.Scale(this->GetSize().GetWidth(), this->GetSize().GetHeight()-60, wxIMAGE_QUALITY_NEAREST);
+            resized = wxBitmap( start_img.Scale( this->GetSize().GetWidth(), this->GetSize().GetHeight()-60, wxIMAGE_QUALITY_HIGH ) );
+
+            dc.DrawBitmap(resized,wxPoint(0,0), true);
+            //dc.DrawBitmap(traffic_img, wxPoint(100,25), true);
+            //dc.DrawBitmap(sim_img, wxPoint(350, 150), true);
+            //dc.DrawBitmap(clicktostart_img, wxPoint(160,420),true);
         }
             break;
 
@@ -214,6 +233,15 @@ void Simulation::OnPaint( wxPaintEvent& event )
                     dc.DrawBitmap( trafficRed_img, lights[0]->GetoffsetPosition(), true);
                     break;
             }
+        }
+            break;
+
+        case state::endScreen:
+        {
+            startPanel->Hide();
+            arenas[0]->Hide();
+            settingsPanel->Show();
+            wxClientDC dc(settingsPanel);
         }
             break;
 
@@ -266,6 +294,14 @@ void Simulation::OnClickToStart(wxMouseEvent& event)
 void Simulation::OnBeginButton(wxCommandEvent& event)
 {
     screenState = state::runningScreen;
+}
+
+void Simulation::OnResize(wxSizeEvent& event)
+{
+    /*wxSize windowSize = event.GetSize();
+    int x = windowSize.GetWidth();
+    int y = windowSize.GetHeight();*/
+
 }
 
 bool Simulation::start()

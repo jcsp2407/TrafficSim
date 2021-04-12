@@ -61,7 +61,7 @@ class Simulation: public wxFrame
         int fullyStopped;
         int score;
         Entity** obstacles;
-        Arena** arenas;
+//        Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;
         int speed;
@@ -92,6 +92,7 @@ class Simulation: public wxFrame
         void OnEraseBackground(wxEraseEvent& event);
         void OnClickToStart(wxMouseEvent& event);
         void OnBeginButton(wxCommandEvent& event);
+        void OnResize(wxSizeEvent& event);
         //*)
 
         //(*Identifiers(Simulation)
