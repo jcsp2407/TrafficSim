@@ -9,8 +9,6 @@
 
 #ifndef TRAFFIC_SIMULATIONMAIN_H
 #define TRAFFIC_SIMULATIONMAIN_H
-#include "Traffic_SimulationApp.h"
-#include "MyBGPanels.h"
 
 //(*Headers(Simulation)
 #include <wx/frame.h>
@@ -23,7 +21,6 @@
 #include "Car.h"
 #include "Motorcycle.h"
 #include "TrafficLight.h"
-
 //*)
 
 class Simulation: public wxFrame
@@ -53,7 +50,6 @@ class Simulation: public wxFrame
         bool start();
         void stop();
 
-
     private:
 
         int cars;
@@ -65,27 +61,15 @@ class Simulation: public wxFrame
         int fullyStopped;
         int score;
         Entity** obstacles;
-        Arena** arenas;
+//        Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;
-
         int speed;
         int screenState;
-		enum state {startScreen, settingsScreen, runningScreen, endScreen};
+        enum state {startScreen, settingsScreen, runningScreen, endScreen};
 
-		wxImagePanel *bgimg;
-
-		wxFrame * startframe;
-		wxFrame * configframe;
-		wxFrame * arenaframe;
-		wxFrame * endframe;
-
-        wxPanel * test;
-		wxImagePanel * startpanel;
-		wxPanel * configpanel;
-		wxPanel * arenapanel;
-		wxImagePanel * endpanel;
-
+        wxPanel *startPanel;
+        wxPanel *settingsPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -107,6 +91,8 @@ class Simulation: public wxFrame
         void OnPaint(wxPaintEvent& event);
         void OnEraseBackground(wxEraseEvent& event);
         void OnClickToStart(wxMouseEvent& event);
+        void OnBeginButton(wxCommandEvent& event);
+        void OnResize(wxSizeEvent& event);
         //*)
 
         //(*Identifiers(Simulation)
@@ -114,12 +100,16 @@ class Simulation: public wxFrame
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         static const long ID_TIMER1;
-        static const long ID_TESTPANEL;
+        static const long ID_STARTPANEL;
+        static const long ID_SETTINGSPANEL;
+        static const long ID_BEGINBUTTON;
+        static const long ID_NUMCARS ;
         //*)
 
         //(*Declarations(Simulation)
         wxStatusBar* StatusBar1;
         wxTimer SimTimer;
+        wxButton* beginButton;
         //*)
 
         DECLARE_EVENT_TABLE()

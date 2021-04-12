@@ -9,7 +9,6 @@
 
 #include "wx_pch.h"
 #include "Traffic_SimulationApp.h"
-//#include "MyBGPanels.h"
 
 //(*AppHeaders
 #include "Traffic_SimulationMain.h"
@@ -25,11 +24,10 @@ bool Traffic_SimulationApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-	  	Simulation* Frame = new Simulation(0);
-	  	Frame->SetInitialSize(wxSize(480,272));
-	  	Frame->SetTitle(_T("Traffic Sim"));
-	  	Frame->Show();
-		SetTopWindow(Frame);
+    Simulation* Frame = new Simulation(0);
+    Frame->SetSize(480, 253);
+    Frame->Show();
+    SetTopWindow(Frame);
     }
     //*)
     return wxsOK;
