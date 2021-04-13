@@ -11,8 +11,7 @@
 #include "Arena.h"
 #include "Traffic_SimulationApp.h"
 #include "wx_pch.h"
-#include <wx/msgdlg.h>
-#include <wx/spinctrl.h>
+
 
 //(*InternalHeaders(Simulation)
 #include <wx/intl.h>
@@ -47,14 +46,27 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 }
 
 //(*IdInit(Simulation)
-const long Simulation::idMenuQuit = wxNewId();
-const long Simulation::idMenuAbout = wxNewId();
-const long Simulation::ID_STATUSBAR1 = wxNewId();
 const long Simulation::ID_TIMER1 = wxNewId();
 const long Simulation::ID_STARTPANEL = wxNewId();
-const long Simulation::ID_SETTINGSPANEL = wxNewId();
-const long Simulation::ID_BEGINBUTTON = wxNewId();
-const long Simulation::ID_NUMCARS = wxNewId();
+const long Simulation::ID_MAINPANEL = wxNewId();
+
+///settings panel buttons and interactives
+const long Simulation::ID_ArenaCtrl = wxNewId();
+const long Simulation::ID_CarSpinCtrl = wxNewId();
+const long Simulation::ID_BikeSpinCtrl = wxNewId();
+const long Simulation::ID_TruckSpinCtrl = wxNewId();
+const long Simulation::ID_DrivingModeCtrl = wxNewId();
+const long Simulation::ID_BeginButton = wxNewId();
+
+//settings panel stuff
+const long Simulation::ID_DrivingText = wxNewId();
+const long Simulation::ID_ArenaText = wxNewId();
+const long Simulation::ID_STATICTEXT3 = wxNewId();
+const long Simulation::ID_STATICTEXT4 = wxNewId();
+const long Simulation::ID_STATICTEXT5 = wxNewId();
+const long Simulation::ID_STATICTEXT6 = wxNewId();
+const long Simulation::ID_PANEL3 = wxNewId();
+const long Simulation::ID_PANEL1 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(Simulation,wxFrame)
@@ -63,18 +75,11 @@ BEGIN_EVENT_TABLE(Simulation,wxFrame)
     //EVT_SIZE()
 END_EVENT_TABLE()
 
-
-Arena** arenas;
-
-
 Simulation::Simulation(wxWindow* parent,wxWindowID id)
 {
     //(*Initialize(Simulation)
 
-    Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
-
-    Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&Simulation::OnQuit);
-    Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&Simulation::OnAbout);
+    Create(parent, id, _T("Traffic Sim"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
     Connect( ID_TIMER1,wxEVT_TIMER,( wxObjectEventFunction )&Simulation::OnTick );
     Connect( wxID_ANY,wxEVT_PAINT,( wxObjectEventFunction )&Simulation::OnPaint );
     Connect( wxID_ANY,wxEVT_ERASE_BACKGROUND,( wxObjectEventFunction )&Simulation::OnEraseBackground );
@@ -92,64 +97,74 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     trafficYellow_img.LoadFile( wxT( "yellow.png" ), wxBITMAP_TYPE_PNG );
     trafficGreen_img.LoadFile( wxT( "green.png" ), wxBITMAP_TYPE_PNG );
     start_img.LoadFile( wxT("NEWSTART.jpg"), wxBITMAP_TYPE_ANY);
-    //traffic_img.LoadFile( wxT("Traffic.png"), wxBITMAP_TYPE_PNG);
-    //sim_img.LoadFile( wxT("Sim.png"), wxBITMAP_TYPE_PNG);
-    //clicktostart_img.LoadFile( wxT("Clicktostart.png"), wxBITMAP_TYPE_PNG);
-
 
     //Re-scaling images
-    car_img = car_img.Rescale(100, 50);
-    motorcycle_img = motorcycle_img.Rotate90().ShrinkBy(2,2);
-    trafficGreen_img = trafficGreen_img.Rescale(10,25);
-    trafficRed_img = trafficRed_img.Rescale(10,25);
-    trafficYellow_img = trafficYellow_img.Rescale(10,25);
-    //start_img = start_img.Rescale(800, 540);
+    car_img = car_img.Rescale(100, 50).ShrinkBy(5,5);
+    truck_img = truck_img.Rescale(100, 50).ShrinkBy(5,5);
+    motorcycle_img = motorcycle_img.Rotate90().ShrinkBy(5,5);
+    trafficGreen_img = trafficGreen_img.Rescale(10,25).ShrinkBy(2,2);
+    trafficRed_img = trafficRed_img.Rescale(10,25).ShrinkBy(2,2);
+    trafficYellow_img = trafficYellow_img.Rescale(10,25).ShrinkBy(2,2);
+
+    ramps = false;
+    fullyStopped = 0;
+    score = 0;
+    speed = 1;
 
     //Panels
+	mainPanel = new wxScrolledWindow(this, ID_MAINPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxVSCROLL, _T("Main Panel"));
+	startPanel = new wxPanel(mainPanel, ID_STARTPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Start Panel"));
+	startPanel->Hide();
+
     wxBoxSizer* BoxSizer1;
-    arenas = new Arena*[10];
-    arenas[0] = new Arena(this, wxID_ANY, wxDefaultPosition, wxSize(800, 540), wxTAB_TRAVERSAL, _T("Arena 0"));
-    BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-    settingsPanel = new wxPanel(this, ID_SETTINGSPANEL, wxDefaultPosition, wxSize(800, 540), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Arena 0"));
-    startPanel = new wxPanel(this, ID_STARTPANEL, wxDefaultPosition, wxSize(800,540), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Start Panel"));
-    startPanel->Hide();
-    arenas[0]->Hide();
-    settingsPanel->Hide();
-
-    //Entities
-    vehicles = new Vehicle*[10];
-    vehicles[0] = new Car(Vehicle::East, 1, arenas[0]->GetPosition(), wxPoint(0,0), 1);
-    vehicles[1] = new Motorcycle(Vehicle::East, 1, arenas[0]->GetPosition(), wxPoint(0, 50), 1);
-
-    lights = new TrafficLight*[3];
-    lights[0] = new TrafficLight(TrafficLight::Green, arenas[0]->GetPosition(), wxPoint(500, 20), 1);
-
-    //Misc
-	wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
-    button_sizer->Add(
-	new wxButton( settingsPanel, ID_BEGINBUTTON, _("Begin"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BEGINBUTTON") ),
-		0,          // make horizontally unstretchable
-        wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL,      // make border all around (implicit top alignment)
-        10 ); 		// set border width to 10
-//	button_sizer->Add(
-//	new wxSpinCtrl( settingsPanel, ID_NUMCARS, _("g"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT, 0, 100, 0 ),
-//		0,          // make horizontally unstretchable
-//        wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,      // make border all around (implicit top alignment)
-//        10 );
-
+	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
+	BoxSizer1->Add(startPanel, 1, wxALL|wxEXPAND, 0);
+	SetSizer(BoxSizer1);
+	BoxSizer1->Fit(this);
+    BoxSizer1->SetSizeHints(this);
 
     screenState = state::startScreen;
 
-    //BoxSizer1->Add(arenas[0], 1, wxALL|wxEXPAND, 5);
-    //BoxSizer1->Add(settingsPanel, 1, wxALL|wxEXPAND, 5);
-    BoxSizer1->Add(startPanel, 1, wxALL|wxEXPAND, 0);
-    SetSizer(BoxSizer1);
-    BoxSizer1->Fit(this);
-    BoxSizer1->SetSizeHints(this);
-
     //Event Handlers
     startPanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&Simulation::OnClickToStart,0,this);
-    Connect(ID_BEGINBUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Simulation::OnBeginButton);
+
+    /* Settings Panel Config */
+	wxBoxSizer* BoxSizer2;
+    settingsPanel = new wxPanel(this, ID_PANEL1, wxPoint(0,0), wxSize(504,280), wxTAB_TRAVERSAL, _T("ID_PANEL1"));
+    BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+    SettingPanel2 = new wxPanel(settingsPanel, ID_PANEL3, wxDefaultPosition, wxSize(491,261), wxTAB_TRAVERSAL, _T("ID_PANEL3"));
+    SettingPanel2->SetBackgroundColour(wxColour(184,243,243));
+    ArenaCtrl = new wxSpinCtrl(SettingPanel2, ID_ArenaCtrl, _T("1"), wxPoint(16,64), wxSize(120,30), wxALIGN_RIGHT, 1, 10, 1, _T("ID_ArenaCtrl"));
+    ArenaCtrl->SetValue(_T("1"));
+    ArenaText = new wxStaticText(SettingPanel2, ID_ArenaText, _("Number of Arenas"), wxPoint(16,48), wxDefaultSize, 0, _T("ID_ArenaText"));
+    DrivingText = new wxStaticText(SettingPanel2, ID_DrivingText, _("Driving Mode"), wxPoint(16,96), wxDefaultSize, 0, _T("ID_DrivingText"));
+    CarSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_CarSpinCtrl, _T("50"), wxPoint(336,40), wxSize(120,30), 0, 0, 100, 10, _T("ID_CarSpinCtrl"));
+    CarSpinCtrl->SetValue(_T("10"));
+    BikeSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_BikeSpinCtrl, _T("50"), wxPoint(336,120), wxSize(120,30), 0, 0, 100, 0, _T("ID_BikeSpinCtrl"));
+    BikeSpinCtrl->SetValue(_T("0"));
+    TruckSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_TruckSpinCtrl, _T("50"), wxPoint(336,80), wxSize(120,30), 0, 0, 100, 0, _T("ID_TruckSpinCtrl"));
+    TruckSpinCtrl->SetValue(_T("0"));
+    DrivingModeCtrl = new wxChoice(SettingPanel2, ID_DrivingModeCtrl, wxPoint(16,112), wxSize(-1,30), 0, 0, 0, wxDefaultValidator, _T("ID_DrivingModeCtrl"));
+    DrivingModeCtrl->SetSelection( DrivingModeCtrl->Append(_("Safe")) );
+    DrivingModeCtrl->Append(_("Average"));
+    DrivingModeCtrl->Append(_("Crazy"));
+    DrivingModeCtrl->Append(_("From Miami"));
+    CarText = new wxStaticText(SettingPanel2, ID_STATICTEXT3, _("Number of Cars"), wxPoint(224,48), wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+    TruckText = new wxStaticText(SettingPanel2, ID_STATICTEXT4, _("Number of Trucks"), wxPoint(208,88), wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+    SettingsText = new wxStaticText(SettingPanel2, ID_STATICTEXT5, _("Simulation Settings"), wxPoint(96,0), wxSize(176,32), 0, _T("ID_STATICTEXT5"));
+    wxFont SettingsTextFont(20,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,_T("Sans"),wxFONTENCODING_DEFAULT);
+    SettingsText->SetFont(SettingsTextFont);
+    BikeText = new wxStaticText(SettingPanel2, ID_STATICTEXT6, _("Number of Motorcycles"), wxPoint(176,128), wxDefaultSize, 0, _T("ID_STATICTEXT6"));
+    BeginButton = new wxButton(SettingPanel2, ID_BeginButton, _("Begin!"), wxPoint(168,152), wxSize(136,40), 0, wxDefaultValidator, _T("ID_BeginButton"));
+    BoxSizer2->Add(SettingPanel2, 1, wxALL|wxEXPAND, 0);
+    settingsPanel->SetSizer(BoxSizer2);
+	settingsPanel->Hide();
+    BoxSizer2->Fit(this);
+    BoxSizer2->SetSizeHints(this);
+
+    //connect settings event handlers
+
+    Connect(ID_BeginButton,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Simulation::OnBeginButtonClick);
 }
 
 Simulation::~Simulation()
@@ -158,45 +173,29 @@ Simulation::~Simulation()
     //*)
 }
 
-void Simulation::OnQuit(wxCommandEvent& event)
-{
-    Close();
-}
-
-void Simulation::OnAbout(wxCommandEvent& event)
-{
-    wxString msg = wxString(_T("Traffic Simulation Program"));
-    wxMessageBox(msg, _("Welcome to..."));
-}
-
 void Simulation::OnEraseBackground( wxEraseEvent& event )
 {
 }
 
 void Simulation::OnPaint( wxPaintEvent& event )
 {
-
     switch (screenState){
         case state::startScreen:
         {
             wxBitmap resized;
             settingsPanel->Hide();
-            arenas[0]->Hide();
             startPanel->Show();
 
             wxClientDC dc(startPanel);
-            resized = wxBitmap( start_img.Scale( this->GetSize().GetWidth(), this->GetSize().GetHeight() ) );
+            resized = wxBitmap( start_img.Scale( this->GetSize().GetWidth(), this->GetSize().GetHeight() ), wxIMAGE_QUALITY_HIGH );
             dc.DrawBitmap(resized,wxPoint(0,0), true);
-
         }
             break;
 
         case state::settingsScreen:
         {
             startPanel->Hide();
-            arenas[0]->Hide();
             settingsPanel->Show();
-            wxClientDC dc(settingsPanel);
         }
             break;
 
@@ -204,11 +203,12 @@ void Simulation::OnPaint( wxPaintEvent& event )
         {
             startPanel->Hide();
             settingsPanel->Hide();
-            arenas[0]->Show();
-            wxClientDC dc(arenas[0]);
+            mainPanel->Show();
 
+            wxClientDC dc(arenas[0]);
             dc.DrawBitmap( car_img, vehicles[0]->GetoffsetPosition(), true);
             dc.DrawBitmap( motorcycle_img, vehicles[1]->GetoffsetPosition(), true);
+            dc.DrawBitmap( truck_img, vehicles[2]->GetoffsetPosition(), true);
 
             switch(lights[0]->Getcolor())
             {
@@ -229,15 +229,13 @@ void Simulation::OnPaint( wxPaintEvent& event )
         {
             startPanel->Hide();
             arenas[0]->Hide();
-            settingsPanel->Show();
-            wxClientDC dc(settingsPanel);
+            settingsPanel->Hide();
         }
             break;
 
         default:
             break;
     }
-
 }
 
 void Simulation::OnTick( wxTimerEvent& event )
@@ -252,7 +250,7 @@ void Simulation::OnTick( wxTimerEvent& event )
         {
             lights[0]->alternate();
 
-            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[0]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[0]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x && vehicles[0]->GetoffsetPosition().x < arenas[0]->GetSize().GetWidth() - 100)){
+            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[0]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[0]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x)){
                 vehicles[0]->move();
             }
 
@@ -262,9 +260,10 @@ void Simulation::OnTick( wxTimerEvent& event )
                 vehicles[1]->Setdirection(Vehicle::South);
             }
 
-            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[1]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[1]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x && vehicles[1]->GetoffsetPosition().y < arenas[0]->GetSize().GetHeight() - 100)){
+            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[1]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[1]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x)){
                 vehicles[1]->move();
             }
+            vehicles[2]->move();
         }
             break;
 
@@ -280,8 +279,31 @@ void Simulation::OnClickToStart(wxMouseEvent& event)
     screenState = state::settingsScreen;
 }
 
-void Simulation::OnBeginButton(wxCommandEvent& event)
+void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 {
+	arenasCnt = ArenaCtrl->GetValue();
+	mode = (Simulation::DriveModeType)DrivingModeCtrl->GetSelection();
+	motorcycles = BikeSpinCtrl->GetValue();
+	cars = CarSpinCtrl->GetValue();
+	trucks = TruckSpinCtrl->GetValue();
+
+    mainPanel->SetScrollbars(0,10, 0, arenasCnt%2? HEIGHT*(arenasCnt+1)/20  : HEIGHT*arenasCnt/20);
+    arenas = new Arena*[arenasCnt];
+    int yPos = 0;
+    for(int i = 0; i < arenasCnt; i++){
+        arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(WIDTH/2), yPos), wxSize(WIDTH/2,HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
+        if(i % 2)
+            yPos+= HEIGHT;
+    }
+
+    vehicles = new Vehicle*[cars];
+    vehicles[0] = new Car(Vehicle::East, 1, wxPoint(0,0), 1);
+    vehicles[1] = new Motorcycle(Vehicle::East, 1, wxPoint(0, 50), 1);
+    vehicles[2] = new Truck(Vehicle::North, 1, wxPoint(50, HEIGHT), 1);
+
+	lights = new TrafficLight*[3];
+    lights[0] = new TrafficLight(TrafficLight::Green, wxPoint(30, 30), 1);
+
     screenState = state::runningScreen;
 }
 
@@ -295,10 +317,15 @@ void Simulation::OnResize(wxSizeEvent& event)
 
 bool Simulation::start()
 {
-
+	return true;
 }
 
 void Simulation::stop()
 {
-
 }
+
+/* __________________Settings Event handlers ______________________				*/
+
+
+
+/* __________________End of Settings Event handlers ______________________				*/

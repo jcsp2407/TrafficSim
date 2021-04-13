@@ -2,8 +2,8 @@
 
 int Vehicle::total = 0;
 
-Vehicle::Vehicle(DirectionType direction, int lane, wxPoint basePosition, wxPoint offsetPosition, int arena):
-     Entity(basePosition, offsetPosition, arena)
+Vehicle::Vehicle(DirectionType direction, int lane, wxPoint offsetPosition, int arena):
+     Entity(offsetPosition, arena)
 {
     this->direction = direction;
     this->lane = lane;

@@ -2,8 +2,8 @@
 
 int Truck::count = 0;
 
-Truck::Truck(DirectionType direction, int lane, wxPoint basePosition, wxPoint offsetPosition, int arena):
-    Vehicle(direction, lane, basePosition, offsetPosition, arena)
+Truck::Truck(DirectionType direction, int lane, wxPoint offsetPosition, int arena):
+    Vehicle(direction, lane, offsetPosition, arena)
 {
     Setspeed(TRUCK);
     // setLength(bitmap.length(x));
@@ -38,5 +38,18 @@ void Truck::show()
 
 bool Truck::move()
 {
-    std::cout << "Moving Truck with speed of" << Getspeed() << std::endl;
+        switch(Getdirection()){
+        case Vehicle::North:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y - 1));
+            break;
+        case Vehicle::South:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y + 1));
+            break;
+        case Vehicle::East:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x + 1, GetoffsetPosition().y));
+            break;
+        case Vehicle::West:
+            SetoffsetPosition(wxPoint(GetoffsetPosition().x - 1, GetoffsetPosition().y));
+            break;
+    }
 }

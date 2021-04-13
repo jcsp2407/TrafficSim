@@ -25,7 +25,7 @@ bool Traffic_SimulationApp::OnInit()
     if ( wxsOK )
     {
     Simulation* Frame = new Simulation(0);
-    Frame->SetSize(480, 253);
+    Frame->SetSize(W_WIDTH, W_HEIGHT);
     Frame->Show();
     SetTopWindow(Frame);
     }
