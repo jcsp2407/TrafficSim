@@ -1,6 +1,6 @@
 #include "Curb.h"
 
-Curb::Curb(wxPoint basePosition, wxPoint offsetPosition, int arena): Entity(basePosition, offsetPosition, arena)
+Curb::Curb(wxPoint offsetPosition, int arena): Entity(offsetPosition, arena)
 {
     // setLength(bitmap.length(x));
     // setWidth(bitmap.length(y));

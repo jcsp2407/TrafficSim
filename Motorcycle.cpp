@@ -2,8 +2,8 @@
 
 int Motorcycle::count = 0;
 
-Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint basePosition, wxPoint offsetPosition, int arena):
-    Vehicle(direction, lane, basePosition, offsetPosition, arena)
+Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint offsetPosition, int arena):
+    Vehicle(direction, lane, offsetPosition, arena)
 {
     Setspeed(MOTORCYCLE);
     // setLength(bitmap.length(x));

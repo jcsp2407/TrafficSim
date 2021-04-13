@@ -20,8 +20,14 @@
 #include "Vehicle.h"
 #include "Car.h"
 #include "Motorcycle.h"
+#include "Truck.h"
 #include "TrafficLight.h"
 //*)
+
+#define W_WIDTH 480       // width of window
+#define WIDTH 480         // width of client area
+#define W_HEIGHT 253      // height of window
+#define HEIGHT 216        // height of client area
 
 class Simulation: public wxFrame
 {
@@ -56,15 +62,25 @@ class Simulation: public wxFrame
         int motorcycles;
         int trucks;
         int arenasCnt;
-        DriveModeType mode;
-        bool ramps;
         int fullyStopped;
         int score;
+        int speed;
+        int screenState;
+
+        DriveModeType mode;
+        bool ramps;
+
+        // containers
         Entity** obstacles;
         Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;
-        int speed;
+
+        enum state {startScreen, settingsScreen, runningScreen, endScreen};
+
+        wxPanel *startPanel;
+        wxPanel *settingsPanel;
+        wxScrolledWindow *mainPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -72,6 +88,12 @@ class Simulation: public wxFrame
         wxImage trafficRed_img;
         wxImage trafficGreen_img;
         wxImage trafficYellow_img;
+        wxImage start_img;
+        wxImage traffic_img;
+        wxImage sim_img;
+        wxImage clicktostart_img;
+
+        wxFont startScreenFont;
 
         //(*Handlers(Simulation)
         void OnQuit(wxCommandEvent& event);
@@ -79,6 +101,9 @@ class Simulation: public wxFrame
         void OnTick(wxTimerEvent& event);
         void OnPaint(wxPaintEvent& event);
         void OnEraseBackground(wxEraseEvent& event);
+        void OnClickToStart(wxMouseEvent& event);
+        void OnBeginButton(wxCommandEvent& event);
+        void OnResize(wxSizeEvent& event);
         //*)
 
         //(*Identifiers(Simulation)
@@ -86,11 +111,17 @@ class Simulation: public wxFrame
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
         static const long ID_TIMER1;
+        static const long ID_STARTPANEL;
+        static const long ID_SETTINGSPANEL;
+        static const long ID_MAINPANEL;
+        static const long ID_BEGINBUTTON;
+        static const long ID_NUMCARS ;
         //*)
 
         //(*Declarations(Simulation)
         wxStatusBar* StatusBar1;
         wxTimer SimTimer;
+        wxButton* beginButton;
         //*)
 
         DECLARE_EVENT_TABLE()

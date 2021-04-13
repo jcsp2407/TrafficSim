@@ -1,6 +1,6 @@
 #include "Ramp.h"
 
-Ramp::Ramp(bool ascending, wxPoint basePosition, wxPoint offsetPosition, int arena): Entity(basePosition, offsetPosition, arena)
+Ramp::Ramp(bool ascending, wxPoint offsetPosition, int arena): Entity(offsetPosition, arena)
 {
     this->ascending = ascending;
     // setLength(bitmap.length(x));

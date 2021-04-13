@@ -11,11 +11,15 @@
 #define TRAFFIC_SIMULATIONAPP_H
 
 #include <wx/app.h>
+#include "Traffic_SimulationMain.h"
 
 class Traffic_SimulationApp : public wxApp
 {
     public:
         virtual bool OnInit();
+        Simulation* Frame;
 };
+
+DECLARE_APP(Traffic_SimulationApp)
 
 #endif // TRAFFIC_SIMULATIONAPP_H

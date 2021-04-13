@@ -24,10 +24,10 @@ bool Traffic_SimulationApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	Simulation* Frame = new Simulation(0);
-    	Frame->Maximize();
-    	Frame->Show();
-    	SetTopWindow(Frame);
+    Simulation* Frame = new Simulation(0);
+    Frame->SetSize(W_WIDTH, W_HEIGHT);
+    Frame->Show();
+    SetTopWindow(Frame);
     }
     //*)
     return wxsOK;
