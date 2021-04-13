@@ -8,7 +8,7 @@
 class Motorcycle : public Vehicle
 {
     public:
-        Motorcycle(DirectionType direction, int lane, wxPoint basePosition, wxPoint offsetPosition, int arena);
+        Motorcycle(DirectionType direction, int lane, wxPoint offsetPosition, int arena);
         virtual ~Motorcycle();
 
         static int Getcount() { return count; }

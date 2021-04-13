@@ -7,7 +7,7 @@
 class Ramp : public Entity
 {
     public:
-        Ramp(bool ascending, wxPoint basePosition, wxPoint offsetPosition, int arena);
+        Ramp(bool ascending,wxPoint offsetPosition, int arena);
         virtual ~Ramp();
 
         bool Getascending() { return ascending; }
