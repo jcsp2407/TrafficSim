@@ -7,7 +7,7 @@
 class Curb : public Entity
 {
     public:
-        Curb(wxPoint basePosition, wxPoint offsetPosition, int arena);
+        Curb(wxPoint offsetPosition, int arena);
         virtual ~Curb();
 
         void show() override;
