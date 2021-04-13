@@ -1,7 +1,8 @@
 #ifndef ARENA_H
 #define ARENA_H
+#include <wx/grid.h>
 
-class Arena : public wxPanel
+class Arena : public wxGrid
 {
     public:
         Arena(wxWindow *parent,
@@ -15,8 +16,6 @@ class Arena : public wxPanel
 
         int Getintersections() { return intersections; }
         void Setintersections(int val) { intersections = val; }
-        wxPoint GetbasePosition() { return basePosition; }
-        void SetbasePosition(wxPoint val) { basePosition = val; }
         int Getlanes() { return lanes; }
         void Setlanes(int val) { lanes = val; }
 
@@ -24,7 +23,6 @@ class Arena : public wxPanel
 
     private:
         int intersections;
-        wxPoint basePosition;
         static int length;
         static int width;
         int lanes;

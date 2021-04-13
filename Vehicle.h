@@ -9,7 +9,7 @@ class Vehicle : public Entity
     public:
         enum DirectionType {North, South, East, West};      // declaring North, South, East, and West directions
 
-        Vehicle(DirectionType direction, int lane, wxPoint basePosition, wxPoint offsetPosition, int currentArena);
+        Vehicle(DirectionType direction, int lane, wxPoint offsetPosition, int currentArena);
         virtual ~Vehicle();
 
         DirectionType Getdirection() { return direction; }
