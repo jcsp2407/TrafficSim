@@ -2526,13 +2526,13 @@
 	"Truck.h"
 	"Vehicle.h"
 
-1618373274 /home/adrian/Downloads/p6/Embedded-GUI-Project/TrafficLight.h
+1618422581 /home/adrian/Downloads/p6/Embedded-GUI-Project/TrafficLight.h
 	"Entity.h"
 
 1618373274 /home/adrian/Downloads/p6/Embedded-GUI-Project/Truck.h
 	"Vehicle.h"
 
-1618417236 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+1618425648 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.cpp
 	"Traffic_SimulationMain.h"
 	"Arena.h"
 	"Traffic_SimulationApp.h"

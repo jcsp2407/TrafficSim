@@ -21,6 +21,7 @@
 
 #define ROWS 14
 #define COLS 14
+#define LIGHTS_PER_ARENA 4
 
 unsigned int random_list[] = {0,3,4,5,6,7,8,9,10,13};
 
@@ -279,7 +280,7 @@ void Simulation::OnPaint( wxPaintEvent& event )
                     }
                     render = new myImageGridCellRenderer(img);
                 }else if(dynamic_cast<Motorcycle*>(vehicles[i])){
-                                        switch(dir){
+                    switch(dir){
                         case Vehicle::North:
                             img = motorcycle_img.Rotate90(false);
                             break;
@@ -297,21 +298,25 @@ void Simulation::OnPaint( wxPaintEvent& event )
 
                 arenas[a]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
                 arenas[a]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
-
             }
 
-//            switch(lights[0]->Getcolor())
-//            {
-//                case TrafficLight::Green:
-//                    dc.DrawBitmap( trafficGreen_img, lights[0]->Getpos(), true);
-//                    break;
-//                case TrafficLight::Yellow:
-//                    dc.DrawBitmap( trafficYellow_img, lights[0]->Getpos(), true);
-//                    break;
-//                case TrafficLight::Red:
-//                    dc.DrawBitmap( trafficRed_img, lights[0]->Getpos(), true);
-//                    break;
-//            }
+            int lightCnt = arenasCnt * LIGHTS_PER_ARENA;
+
+            for(int i = 0; i < lightCnt; i++){
+                switch(lights[i]->Getcolor()){
+                    case TrafficLight::Green:
+                        img = trafficGreen_img;
+                        break;
+                    case TrafficLight::Yellow:
+                        img = trafficYellow_img;
+                        break;
+                    case TrafficLight::Red:
+                        img = trafficRed_img;
+                        break;
+                }
+                render = new myImageGridCellRenderer(img);
+                arenas[i/LIGHTS_PER_ARENA]->SetCellRenderer(lights[i]->Getpos().y, lights[i]->Getpos().x, render);
+            }
         }
             break;
 
@@ -337,6 +342,10 @@ void Simulation::OnTick( wxTimerEvent& event )
 
             for(int i= 0; i < total; i++)
                 vehicles[i]->move();
+
+            int lightsCnt = arenasCnt * LIGHTS_PER_ARENA;
+            for(int i= 0; i < lightsCnt; i++)
+                lights[i]->alternate();
         }
             break;
 
@@ -381,6 +390,28 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 
         if(i % 2)
             yPos+= HEIGHT;
+    }
+
+    int lightCnt = arenasCnt * LIGHTS_PER_ARENA;
+    lights = new TrafficLight*[lightCnt];
+
+    for(int i = 0; i < lightCnt; i++){
+        int x;
+        int y;
+        switch(i % LIGHTS_PER_ARENA){
+            case 0:
+                x = 4; y =3;
+            break;
+            case 1:
+                x = 10; y =4;
+            break;
+            case 2:
+                x = 9; y =10;
+            break;
+            default:
+                x = 3; y =9;
+        }
+        lights[i] = new TrafficLight(static_cast<TrafficLight::LightType>(i%2), wxPoint(x,y), i/LIGHTS_PER_ARENA);
     }
 
     vehicles = new Vehicle*[cars+trucks+motorcycles];
@@ -454,9 +485,6 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
         vehicles[i] = vehicles[r_index];
         vehicles[r_index] = temp;
     }
-
-	lights = new TrafficLight*[3];
-    lights[0] = new TrafficLight(TrafficLight::Green, wxPoint(30, 30), 1);
 
     screenState = state::runningScreen;
 }
