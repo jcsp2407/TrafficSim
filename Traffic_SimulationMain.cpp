@@ -123,11 +123,11 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Timer
     SimTimer.SetOwner( this, ID_TIMER1 );
-    SimTimer.Start(100, false );
+    SimTimer.Start(1000, false );
 
     //Loading images
     car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
-    //truck_img.LoadFile( wxT( "truck.png" ), wxBITMAP_TYPE_PNG );
+    truck_img.LoadFile( wxT( "truck.png" ), wxBITMAP_TYPE_PNG );
     motorcycle_img.LoadFile( wxT( "bike.png" ), wxBITMAP_TYPE_PNG );
     trafficRed_img.LoadFile( wxT( "red.png" ), wxBITMAP_TYPE_PNG );
     trafficYellow_img.LoadFile( wxT( "yellow.png" ), wxBITMAP_TYPE_PNG );
@@ -137,8 +137,8 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Re-scaling images
     car_img = car_img.Rescale(100, 50).ShrinkBy(7,5);
-    //truck_img = truck_img.Rescale(100, 50).ShrinkBy(5,5);
-    motorcycle_img = motorcycle_img.Rotate90().ShrinkBy(5,5);
+    truck_img = truck_img.Rescale(100, 50).ShrinkBy(5,5);
+    motorcycle_img = motorcycle_img.ShrinkBy(5,5);
     trafficGreen_img = trafficGreen_img.Rescale(10,25).ShrinkBy(2,2);
     trafficRed_img = trafficRed_img.Rescale(10,25).ShrinkBy(2,2);
     trafficYellow_img = trafficYellow_img.Rescale(10,25).ShrinkBy(2,2);
@@ -237,19 +237,67 @@ void Simulation::OnPaint( wxPaintEvent& event )
             settingsPanel->Hide();
             mainPanel->Show();
 
-            for(int i = 0; i < arenasCnt; i++){
-                for(int j = 0; j < cars; j++){
-                    arenas[i]->SetCellRenderer(vehicles[j]->GetOldPos().y, vehicles[j]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
-                    arenas[i]->SetCellRenderer(vehicles[j]->Getpos().y, vehicles[j]->Getpos().x, new myImageGridCellRenderer(car_img));
+            int total = Vehicle::Gettotal();
+            int a;
+            Vehicle::DirectionType dir;
+            wxImage img;
+            myImageGridCellRenderer* render;
+
+            for(int i = 0; i < total; i++){
+                a = vehicles[i]->getCurrentArena();
+                dir = vehicles[i]->Getdirection();
+
+                if(dynamic_cast<Car*>(vehicles[i])){
+                    switch(dir){
+                        case Vehicle::North:
+                            img = car_img.Rotate90(false);
+                            break;
+                        case Vehicle::South:
+                            img = car_img.Rotate90(true);
+                            break;
+                        case Vehicle::West:
+                            img = car_img.Rotate180();
+                            break;
+                        default:
+                            img = car_img;
+                    }
+                    render = new myImageGridCellRenderer(img);
                 }
-                for(int j = 0; j < trucks; j++){
-                    arenas[i]->SetCellRenderer(vehicles[j]->GetOldPos().y, vehicles[j]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
-                    //arenas[i]->SetCellRenderer(vehicles[j]->Getpos().y, vehicles[j]->Getpos().x, new myImageGridCellRenderer(truck_img));
+                else if(dynamic_cast<Truck*>(vehicles[i])){
+                    switch(dir){
+                        case Vehicle::North:
+                            img = truck_img.Rotate90(false);
+                            break;
+                        case Vehicle::South:
+                            img = truck_img.Rotate90(true);
+                            break;
+                        case Vehicle::West:
+                            img = truck_img.Rotate180();
+                            break;
+                        default:
+                            img = truck_img;
+                    }
+                    render = new myImageGridCellRenderer(img);
+                }else if(dynamic_cast<Motorcycle*>(vehicles[i])){
+                                        switch(dir){
+                        case Vehicle::North:
+                            img = motorcycle_img.Rotate90(false);
+                            break;
+                        case Vehicle::South:
+                            img = motorcycle_img.Rotate90(true);
+                            break;
+                        case Vehicle::West:
+                            img = motorcycle_img.Rotate180();
+                            break;
+                        default:
+                            img = motorcycle_img;
+                    }
+                    render = new myImageGridCellRenderer(img);
                 }
-                for(int j = 0; j < motorcycles; j++){
-                    arenas[i]->SetCellRenderer(vehicles[j]->GetOldPos().y, vehicles[j]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
-                    arenas[i]->SetCellRenderer(vehicles[j]->Getpos().y, vehicles[j]->Getpos().x, new myImageGridCellRenderer(motorcycle_img));
-                }
+
+                arenas[a]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
+                arenas[a]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
+
             }
 
 //            switch(lights[0]->Getcolor())
@@ -283,14 +331,10 @@ void Simulation::OnPaint( wxPaintEvent& event )
 void Simulation::OnTick( wxTimerEvent& event )
 {
 	switch (screenState){
-        case state::startScreen:
-        {
-        }
-            break;
-
         case state::runningScreen:
         {
-            int total = cars + trucks + motorcycles;
+            int total = Vehicle::Gettotal();
+
             for(int i= 0; i < total; i++)
                 vehicles[i]->move();
         }
@@ -341,6 +385,8 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 
     vehicles = new Vehicle*[cars+trucks+motorcycles];
 
+    int total;
+
     for(int i = 0; i < cars; i++){
         // Get random vehicle spawn coordinates
         randXY();
@@ -355,7 +401,9 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
             case 13: dir = Vehicle::DirectionType::North; break;
         }
 
-        vehicles[i] = new Car(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+        total = Vehicle::Gettotal();
+
+        vehicles[total] = new Car(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
     }
 
     for(int i = 0; i < trucks; i++){
@@ -372,7 +420,9 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
             case 13: dir = Vehicle::DirectionType::North; break;
         }
 
-        vehicles[i + cars] = new Truck(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+        total = Vehicle::Gettotal();
+
+        vehicles[total] = new Truck(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
     }
 
     for(int i = 0; i < motorcycles; i++){
@@ -389,7 +439,20 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
             case 13: dir = Vehicle::DirectionType::North; break;
         }
 
-        vehicles[i + cars + trucks] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt );
+        total = Vehicle::Gettotal();
+
+        vehicles[total] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt );
+    }
+
+    // Shuffle array of vehicles
+    Vehicle* temp;
+    int r_index;
+
+    for(int i = 0; i < total; i++){
+        temp = vehicles[i];
+        r_index = rand() % total;
+        vehicles[i] = vehicles[r_index];
+        vehicles[r_index] = temp;
     }
 
 	lights = new TrafficLight*[3];
