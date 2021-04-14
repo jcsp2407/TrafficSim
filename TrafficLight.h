@@ -12,7 +12,7 @@ class TrafficLight : public Entity
     public:
         enum LightType {Green, Yellow, Red};      // declaring Green, Yellow, and Red lights
 
-        TrafficLight(LightType color, wxPoint offsetPosition, int arena);
+        TrafficLight(LightType color, wxPoint pos, int arena);
         virtual ~TrafficLight();
 
         LightType Getcolor() { return color; }

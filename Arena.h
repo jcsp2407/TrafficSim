@@ -1,7 +1,8 @@
 #ifndef ARENA_H
 #define ARENA_H
+#include <wx/grid.h>
 
-class Arena : public wxPanel
+class Arena : public wxGrid
 {
     public:
         Arena(wxWindow *parent,

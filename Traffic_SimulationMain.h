@@ -15,19 +15,50 @@
 #include <wx/menu.h>
 #include <wx/statusbr.h>
 #include <wx/dcbuffer.h>
+#include <wx/msgdlg.h>
+#include <wx/spinctrl.h>
+#include <wx/button.h>
+#include <wx/choice.h>
+#include <wx/panel.h>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
+
+
 #include "Arena.h"
-#include "Entity.h"
-#include "Vehicle.h"
 #include "Car.h"
+//#include "Curb.h"
+#include "Entity.h"
 #include "Motorcycle.h"
-#include "Truck.h"
+///#include "Ramp.h"
+///#include "Traffic_SimulationApp.h"
 #include "TrafficLight.h"
+#include "Truck.h"
+#include "Vehicle.h"
 //*)
 
 #define W_WIDTH 480       // width of window
 #define WIDTH 480         // width of client area
+#define A_WIDTH 214       // width of arena
 #define W_HEIGHT 253      // height of window
 #define HEIGHT 216        // height of client area
+#define A_HEIGHT 214      // height of arena
+
+class myImageGridCellRenderer : public wxGridCellStringRenderer
+{
+public:
+    wxImage inImage;
+
+    myImageGridCellRenderer(wxImage test){
+        inImage = test;
+    }
+
+    virtual void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, const wxRect& rect, int row, int col, bool isSelected)
+    {
+        wxImage cellImage = inImage;
+        wxBitmap cellBitmap(cellImage);
+        dc.DrawBitmap(cellBitmap, rect.x, rect.y);
+    }
+};
 
 class Simulation: public wxFrame
 {
@@ -36,17 +67,8 @@ class Simulation: public wxFrame
         Simulation(wxWindow* parent,wxWindowID id = -1);
         virtual ~Simulation();
 
-        int Getcars() { return cars; }
-        void Setcars(int val) { cars = val; }
-        int Getmotorcycles() { return motorcycles; }
-        void Setmotorcycles(int val) { motorcycles = val; }
-        int Gettrucks() { return trucks; }
-        void Settrucks(int val) { trucks = val; }
-        int GetarenasCnt() { return arenasCnt; }
-        void SetarenasCnt(int val) { arenasCnt = val; }
-        enum DriveModeType { Safe, Average, Crazy};      // declaring Safe, Average, and Crazy drive modes
-        DriveModeType Getmode() { return mode; }
-        void Setmode(DriveModeType val) { mode = val; }
+        enum DriveModeType { Safe, Average, Crazy, FromMiami};      // declaring Safe, Average, and Crazy drive modes
+     //   void Setmode(DriveModeType val) { mode = val; }
         bool Getramps() { return ramps; }
         void Setramps(bool val) { ramps = val; }
         int GetfullyStopped() { return fullyStopped; }
@@ -78,9 +100,9 @@ class Simulation: public wxFrame
 
         enum state {startScreen, settingsScreen, runningScreen, endScreen};
 
+        wxScrolledWindow *mainPanel;
         wxPanel *startPanel;
         wxPanel *settingsPanel;
-        wxScrolledWindow *mainPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -92,6 +114,7 @@ class Simulation: public wxFrame
         wxImage traffic_img;
         wxImage sim_img;
         wxImage clicktostart_img;
+        wxImage blank_img;
 
         wxFont startScreenFont;
 
@@ -102,8 +125,12 @@ class Simulation: public wxFrame
         void OnPaint(wxPaintEvent& event);
         void OnEraseBackground(wxEraseEvent& event);
         void OnClickToStart(wxMouseEvent& event);
-        void OnBeginButton(wxCommandEvent& event);
         void OnResize(wxSizeEvent& event);
+
+		///settings panel
+
+        void OnBeginButtonClick(wxCommandEvent& event);
+
         //*)
 
         //(*Identifiers(Simulation)
@@ -112,16 +139,46 @@ class Simulation: public wxFrame
         static const long ID_STATUSBAR1;
         static const long ID_TIMER1;
         static const long ID_STARTPANEL;
-        static const long ID_SETTINGSPANEL;
         static const long ID_MAINPANEL;
-        static const long ID_BEGINBUTTON;
-        static const long ID_NUMCARS ;
+
+
+        ///identifiers for settings panel
+		static const long ID_ArenaCtrl;
+        static const long ID_ArenaText;
+        static const long ID_DrivingText;
+        static const long ID_CarSpinCtrl;
+        static const long ID_BikeSpinCtrl;
+        static const long ID_TruckSpinCtrl;
+        static const long ID_DrivingModeCtrl;
+        static const long ID_STATICTEXT3;
+        static const long ID_STATICTEXT4;
+        static const long ID_STATICTEXT5;
+        static const long ID_STATICTEXT6;
+        static const long ID_BeginButton;
+        static const long ID_PANEL3;
+        static const long ID_PANEL1;
         //*)
 
         //(*Declarations(Simulation)
         wxStatusBar* StatusBar1;
         wxTimer SimTimer;
         wxButton* beginButton;
+
+        ///settings declarations
+        wxButton* BeginButton;
+        wxChoice* DrivingModeCtrl;
+        wxPanel* SettingPanel2;
+        wxPanel* SettingPanel;
+        wxSpinCtrl* ArenaCtrl;
+        wxSpinCtrl* BikeSpinCtrl;
+        wxSpinCtrl* CarSpinCtrl;
+        wxSpinCtrl* TruckSpinCtrl;
+        wxStaticText* ArenaText;
+        wxStaticText* BikeText;
+        wxStaticText* CarText;
+        wxStaticText* DrivingText;
+        wxStaticText* SettingsText;
+        wxStaticText* TruckText;
         //*)
 
         DECLARE_EVENT_TABLE()

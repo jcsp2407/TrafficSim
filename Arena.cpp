@@ -5,7 +5,7 @@ Arena::Arena(wxWindow *parent,
             const wxPoint& pos,
             const wxSize& size,
             long style,
-            const wxString& name): wxPanel(parent, winid, pos, size, style, name)
+            const wxString& name): wxGrid(parent, winid, pos, size, style, name)
 {
     //ctor
 }
