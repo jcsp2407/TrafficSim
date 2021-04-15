@@ -84,6 +84,7 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 const long Simulation::ID_TIMER1 = wxNewId();
 const long Simulation::ID_STARTPANEL = wxNewId();
 const long Simulation::ID_MAINPANEL = wxNewId();
+const long Simulation::ID_SCOREPANEL = wxNewId();
 
 ///settings panel buttons and interactives
 const long Simulation::ID_ArenaCtrl = wxNewId();
@@ -152,8 +153,11 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     speed = 1;
 
     //Panels
-	mainPanel = new wxScrolledWindow(this, ID_MAINPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxVSCROLL, _T("Main Panel"));
-	startPanel = new wxPanel(mainPanel, ID_STARTPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Start Panel"));
+	mainPanel = new wxScrolledWindow(this, ID_MAINPANEL, wxDefaultPosition, wxSize(R_WIDTH,R_HEIGHT), wxTAB_TRAVERSAL | wxVSCROLL, _T("Main Panel"));
+	scorePanel = new wxPanel(this, ID_SCOREPANEL, wxPoint(R_WIDTH, 0), wxSize(WIDTH - R_WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Score Panel"));
+	scorePanel->SetBackgroundColour(*wxLIGHT_GREY);
+	scorePanel->Hide();
+	startPanel = new wxPanel(this, ID_STARTPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Start Panel"));
 	startPanel->Hide();
 
     wxBoxSizer* BoxSizer1;
@@ -239,6 +243,7 @@ void Simulation::OnPaint( wxPaintEvent& event )
             startPanel->Hide();
             settingsPanel->Hide();
             mainPanel->Show();
+            scorePanel->Show();
 
             int total = Vehicle::Gettotal();
             int a;
@@ -471,7 +476,7 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
     arenas = new Arena*[arenasCnt];
     int yPos = 0;
     for(int i = 0; i < arenasCnt; i++){
-        arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(WIDTH/2), yPos), wxSize(A_WIDTH,A_HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
+        arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(R_WIDTH/2), yPos), wxSize(A_WIDTH,A_HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
         arenas[i]->CreateGrid(ROWS,COLS);
         arenas[i]->EnableEditing(true);
         arenas[i]->EnableGridLines(true);

@@ -38,9 +38,11 @@
 
 #define W_WIDTH 480       // width of window
 #define WIDTH 480         // width of client area
+#define R_WIDTH 430         // width of running panel
 #define A_WIDTH 214       // width of arena
 #define W_HEIGHT 253      // height of window
 #define HEIGHT 216        // height of client area
+#define R_HEIGHT 216        // height of running panel
 #define A_HEIGHT 214      // height of arena
 
 class myImageGridCellRenderer : public wxGridCellStringRenderer
@@ -101,6 +103,7 @@ class Simulation: public wxFrame
         enum state {startScreen, settingsScreen, runningScreen, endScreen};
 
         wxScrolledWindow *mainPanel;
+        wxPanel *scorePanel;
         wxPanel *startPanel;
         wxPanel *settingsPanel;
 
@@ -141,6 +144,7 @@ class Simulation: public wxFrame
         static const long ID_TIMER1;
         static const long ID_STARTPANEL;
         static const long ID_MAINPANEL;
+        static const long ID_SCOREPANEL;
 
 
         ///identifiers for settings panel

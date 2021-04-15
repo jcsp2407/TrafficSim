@@ -2506,7 +2506,7 @@
 	<wx/app.h>
 	"Traffic_SimulationMain.h"
 
-1618497364 /home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.h
+1618510713 /home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.h
 	<wx/frame.h>
 	<wx/menu.h>
 	<wx/statusbr.h>
@@ -2532,7 +2532,7 @@
 1618493423 /home/adrian/Downloads/p6/Embedded-GUI-Project/Truck.h
 	"Vehicle.h"
 
-1618498394 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+1618510780 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.cpp
 	"Traffic_SimulationMain.h"
 	"Arena.h"
 	"Traffic_SimulationApp.h"
