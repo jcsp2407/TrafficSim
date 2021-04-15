@@ -16,8 +16,43 @@
 //(*InternalHeaders(Simulation)
 #include <wx/intl.h>
 #include <wx/string.h>
+#include <time.h>
 //*)
 
+#define ROWS 14
+#define COLS 14
+#define LIGHTS_PER_ARENA 4
+
+unsigned int random_list[] = {0,3,4,5,6,7,8,9,10,13};
+
+// Randomly spawn vehicle coordinates
+int xRand, yRand;
+
+void randXY(){
+    int r = random_list[rand() % 10];
+
+    if(rand() % 2){
+        xRand = r;
+        if(xRand == 0)
+            yRand = rand() % 4 + 7;
+        else if(xRand <= 6)
+            yRand = 0;
+        else if(xRand <= 10)
+            yRand = 13;
+        else
+            yRand = rand() % 4 + 3;
+    }else{
+        yRand = r;
+        if(yRand == 0)
+            xRand = rand() % 4 + 3;
+        else if(yRand <= 6)
+            xRand = 13;
+        else if(yRand <= 10)
+            xRand = 0;
+        else
+            xRand = rand() % 4 + 7;
+    }
+}
 
 //helper functions
 enum wxbuildinfoformat {
@@ -77,6 +112,8 @@ END_EVENT_TABLE()
 
 Simulation::Simulation(wxWindow* parent,wxWindowID id)
 {
+    srand(time(NULL));
+
     //(*Initialize(Simulation)
 
     Create(parent, id, _T("Traffic Sim"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
@@ -84,10 +121,17 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     Connect( wxID_ANY,wxEVT_PAINT,( wxObjectEventFunction )&Simulation::OnPaint );
     Connect( wxID_ANY,wxEVT_ERASE_BACKGROUND,( wxObjectEventFunction )&Simulation::OnEraseBackground );
     //*)
+//two green		two red
+//two yellow 	two red
+//two red 		two red for 1 second to clear intersection
+
+//two red 		two green
+//two red 		two yellow
+//two red 		two red for 1 second to clear intersection
 
     //Timer
     SimTimer.SetOwner( this, ID_TIMER1 );
-    SimTimer.Start( 10, false );
+    SimTimer.Start(200, false );
 
     //Loading images
     car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
@@ -97,14 +141,19 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     trafficYellow_img.LoadFile( wxT( "yellow.png" ), wxBITMAP_TYPE_PNG );
     trafficGreen_img.LoadFile( wxT( "green.png" ), wxBITMAP_TYPE_PNG );
     start_img.LoadFile( wxT("NEWSTART.jpg"), wxBITMAP_TYPE_ANY);
+    blank_img.LoadFile( wxT("blank.png"), wxBITMAP_TYPE_ANY);
+    crash_img.LoadFile( wxT("crash.png"), wxBITMAP_TYPE_ANY);
+	grass_img.LoadFile( wxT("grass_img.jpg"), wxBITMAP_TYPE_ANY);
 
     //Re-scaling images
-    car_img = car_img.Rescale(100, 50).ShrinkBy(5,5);
+    car_img = car_img.Rescale(100, 50).ShrinkBy(7,5);
     truck_img = truck_img.Rescale(100, 50).ShrinkBy(5,5);
-    motorcycle_img = motorcycle_img.Rotate90().ShrinkBy(5,5);
+    motorcycle_img = motorcycle_img.ShrinkBy(7,6);
     trafficGreen_img = trafficGreen_img.Rescale(10,25).ShrinkBy(2,2);
     trafficRed_img = trafficRed_img.Rescale(10,25).ShrinkBy(2,2);
     trafficYellow_img = trafficYellow_img.Rescale(10,25).ShrinkBy(2,2);
+    crash_img = crash_img.ShrinkBy(73,61);
+	grass_img = grass_img.ShrinkBy(8,8);
 
     ramps = false;
     fullyStopped = 0;
@@ -114,14 +163,11 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     //Panels
 	mainPanel = new wxScrolledWindow(this, ID_MAINPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxVSCROLL, _T("Main Panel"));
 	startPanel = new wxPanel(mainPanel, ID_STARTPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Start Panel"));
-	startPanel->Hide();
 
     wxBoxSizer* BoxSizer1;
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	BoxSizer1->Add(startPanel, 1, wxALL|wxEXPAND, 0);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
-    BoxSizer1->SetSizeHints(this);
 
     screenState = state::startScreen;
 
@@ -129,8 +175,8 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     startPanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&Simulation::OnClickToStart,0,this);
 
     /* Settings Panel Config */
-	wxBoxSizer* BoxSizer2;
-    settingsPanel = new wxPanel(this, ID_PANEL1, wxPoint(0,0), wxSize(504,280), wxTAB_TRAVERSAL, _T("ID_PANEL1"));
+
+    settingsPanel = new wxPanel(this, ID_PANEL1, wxPoint(0,0), wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL, _T("ID_PANEL1"));
     BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
     SettingPanel2 = new wxPanel(settingsPanel, ID_PANEL3, wxDefaultPosition, wxSize(491,261), wxTAB_TRAVERSAL, _T("ID_PANEL3"));
     SettingPanel2->SetBackgroundColour(wxColour(184,243,243));
@@ -159,12 +205,11 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     BoxSizer2->Add(SettingPanel2, 1, wxALL|wxEXPAND, 0);
     settingsPanel->SetSizer(BoxSizer2);
 	settingsPanel->Hide();
-    BoxSizer2->Fit(this);
-    BoxSizer2->SetSizeHints(this);
 
     //connect settings event handlers
-
     Connect(ID_BeginButton,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Simulation::OnBeginButtonClick);
+
+	startPanel->Show();
 }
 
 Simulation::~Simulation()
@@ -182,10 +227,7 @@ void Simulation::OnPaint( wxPaintEvent& event )
     switch (screenState){
         case state::startScreen:
         {
-            wxBitmap resized;
-            settingsPanel->Hide();
-            startPanel->Show();
-
+			wxBitmap resized;
             wxClientDC dc(startPanel);
             resized = wxBitmap( start_img.Scale( this->GetSize().GetWidth(), this->GetSize().GetHeight() ), wxIMAGE_QUALITY_HIGH );
             dc.DrawBitmap(resized,wxPoint(0,0), true);
@@ -194,42 +236,157 @@ void Simulation::OnPaint( wxPaintEvent& event )
 
         case state::settingsScreen:
         {
-            startPanel->Hide();
-            settingsPanel->Show();
+
         }
             break;
 
         case state::runningScreen:
         {
-            startPanel->Hide();
-            settingsPanel->Hide();
-            mainPanel->Show();
+            int total = Vehicle::Gettotal();
+            int a;
+            Vehicle::DirectionType dir;
+            wxImage img;
+            myImageGridCellRenderer* render;
 
-            wxClientDC dc(arenas[0]);
-            dc.DrawBitmap( car_img, vehicles[0]->GetoffsetPosition(), true);
-            dc.DrawBitmap( motorcycle_img, vehicles[1]->GetoffsetPosition(), true);
-            dc.DrawBitmap( truck_img, vehicles[2]->GetoffsetPosition(), true);
+            for(int i = 0; i < total; i++){
+                a = vehicles[i]->getCurrentArena();
+                dir = vehicles[i]->Getdirection();
 
-            switch(lights[0]->Getcolor())
-            {
-                case TrafficLight::Green:
-                    dc.DrawBitmap( trafficGreen_img, lights[0]->GetoffsetPosition(), true);
-                    break;
-                case TrafficLight::Yellow:
-                    dc.DrawBitmap( trafficYellow_img, lights[0]->GetoffsetPosition(), true);
-                    break;
-                case TrafficLight::Red:
-                    dc.DrawBitmap( trafficRed_img, lights[0]->GetoffsetPosition(), true);
-                    break;
+                if(dynamic_cast<Car*>(vehicles[i])){
+                    if(!vehicles[i]->Getcrashed()){
+                        switch(dir){
+                            case Vehicle::North:
+                                img = car_img.Rotate90(false);
+                                break;
+                            case Vehicle::South:
+                                img = car_img.Rotate90(true);
+                                break;
+                            case Vehicle::West:
+                                img = car_img.Rotate180();
+                                break;
+                            default:
+                                img = car_img;
+                        }
+                    }else{
+                        img = crash_img;
+                    }
+                    render = new myImageGridCellRenderer(img);
+                }
+                else if(dynamic_cast<Truck*>(vehicles[i])){
+                    if(!vehicles[i]->Getcrashed()){
+                        switch(dir){
+                            case Vehicle::North:
+                                img = truck_img.Rotate90(false);
+                                break;
+                            case Vehicle::South:
+                                img = truck_img.Rotate90(true);
+                                break;
+                            case Vehicle::West:
+                                img = truck_img.Rotate180();
+                                break;
+                            default:
+                                img = truck_img;
+                        }
+                    }else{
+                        img = crash_img;
+                    }
+                    render = new myImageGridCellRenderer(img);
+
+                }else if(dynamic_cast<Motorcycle*>(vehicles[i])){
+                    if(!vehicles[i]->Getcrashed()){
+                        switch(dir){
+                            case Vehicle::North:
+                                img = motorcycle_img.Rotate90(false);
+                                break;
+                            case Vehicle::South:
+                                img = motorcycle_img.Rotate90(true);
+                                break;
+                            case Vehicle::West:
+                                img = motorcycle_img.Rotate180();
+                                break;
+                            default:
+                                img = motorcycle_img;
+                        }
+                    }else{
+                        img = crash_img;
+                    }
+                    render = new myImageGridCellRenderer(img);
+                }
+
+                    if( obstacles[vehicles[i]->GetOldPos().x][vehicles[i]->GetOldPos().y][a] == NULL)
+						arenas[a]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
+					arenas[a]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
             }
+
+            int lightCnt = arenasCnt * LIGHTS_PER_ARENA;
+
+            for(int i = 0; i < lightCnt; i++){
+                switch(lights[i]->Getcolor()){
+                    case TrafficLight::Green:
+                    	switch(lights[i]->Getdirection()){
+							case TrafficLight::North:
+                                img = trafficGreen_img.Rotate90(true);
+                                break;
+                            case TrafficLight::South:
+                            	img = trafficGreen_img.Rotate90(false);
+                                break;
+                            case TrafficLight::West:
+                                img = trafficGreen_img;
+                                break;
+                            default:
+								img = trafficGreen_img.Rotate180();
+                    	}
+                    	break;
+
+
+                    case TrafficLight::Yellow:
+                    	switch(lights[i]->Getdirection()){
+							case TrafficLight::North:
+                                img = trafficYellow_img.Rotate90(true);
+                                break;
+                            case TrafficLight::South:
+                            	img = trafficYellow_img.Rotate90(false);
+                                break;
+                            case TrafficLight::West:
+                                img = trafficYellow_img;
+                                break;
+                            default:
+								img = trafficYellow_img.Rotate180();
+                    	}
+                    	break;
+
+
+                    case TrafficLight::Red:
+                    	switch(lights[i]->Getdirection()){
+							case TrafficLight::North:
+                                img = trafficRed_img.Rotate90(true);
+                                break;
+                            case TrafficLight::South:
+                            	img = trafficRed_img.Rotate90(false);
+                                break;
+                            case TrafficLight::West:
+                                img = trafficRed_img;
+                                break;
+                            default:
+								img = trafficRed_img.Rotate180();
+                    	}
+                    	break;
+                }
+
+                render = new myImageGridCellRenderer(img);
+                arenas[i/LIGHTS_PER_ARENA]->SetCellRenderer(lights[i]->Getpos().y, lights[i]->Getpos().x, render);
+
+            }
+              //  		myImageGridCellRenderer* render;
+
         }
             break;
 
         case state::endScreen:
         {
-            startPanel->Hide();
-            arenas[0]->Hide();
-            settingsPanel->Hide();
+//            startPanel->Hide();
+//            arenas[0]->Hide();
+//            settingsPanel->Hide();
         }
             break;
 
@@ -241,29 +398,89 @@ void Simulation::OnPaint( wxPaintEvent& event )
 void Simulation::OnTick( wxTimerEvent& event )
 {
 	switch (screenState){
-        case state::startScreen:
-        {
-        }
-            break;
-
         case state::runningScreen:
         {
-            lights[0]->alternate();
+            int total = Vehicle::Gettotal();
 
-            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[0]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[0]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x)){
-                vehicles[0]->move();
+            Vehicle* temp;
+            int r_index;
+
+            int x, y, arena;
+
+            for(int i= 0; i < total; i++){
+                // Shuffle vehicle for randomness
+                temp = vehicles[i];
+                r_index = (rand() % (total - i)) + i;
+                vehicles[i] = vehicles[r_index];
+                vehicles[r_index] = temp;
+
+
+                // CHECK GETPOSFRONT() AND USE PROBABILITIES FOR CRASHING
+
+                if(!vehicles[i]->Getcrossed()){
+                    // Move the shuffled vehicle if not crashed
+                    if(!vehicles[i]->Getcrashed()){
+                        obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()] = NULL;
+
+                        x = vehicles[i]->getPosFront().x;
+                        y = vehicles[i]->getPosFront().y;
+                        arena = vehicles[i]->getCurrentArena();
+
+                        if((x < 0 || x >= COLS) || (y < 0 || y >= ROWS)){
+                            vehicles[i]->move();
+                            vehicles[i]->Setcrossed(true);
+                            score++;
+                            continue;
+                        }
+
+                        temp = obstacles[x][y][arena];
+
+                        if(temp == NULL){
+                            vehicles[i]->move();
+                            obstacles[x][y][arena] = vehicles[i];
+        //                    MessageDialog1->SetMessage(wxT("Spot unoccupied"));
+        //                    MessageDialog1->ShowModal();
+                        }else{
+        //                    MessageDialog1->SetMessage(wxT("Spot occupied"));
+        //                    MessageDialog1->ShowModal();
+                            int r;
+                            switch(mode){
+                                case Average: // Crazy = 10% crashing probability
+                                    r = rand() % 10;
+                                    if(!r){
+                                        vehicles[i]->move();
+                                        vehicles[i]->Setcrashed(true);
+                                        temp->Setcrashed(true);
+                                    }
+                                    break;
+                                case Crazy: // Crazy = 25% crashing probability
+                                    r = rand() % 4;
+                                    if(!r){
+                                        vehicles[i]->move();
+                                        vehicles[i]->Setcrashed(true);
+                                        temp->Setcrashed(true);
+                                    }
+                                    break;
+                                case FromMiami: // FromMiami = 50% crashing probability
+                                    r = rand() % 2;
+                                    if(!r){
+                                        vehicles[i]->move();
+                                        vehicles[i]->Setcrashed(true);
+                                        temp->Setcrashed(true);
+                                    }
+                                    break;
+                                default:    // Safe = 0% crashing probability
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
 
-            if(vehicles[1]->GetoffsetPosition().x == lights[0]->GetoffsetPosition().x){
-                motorcycle_img = motorcycle_img.Rotate90();
-                vehicles[1]->move();
-                vehicles[1]->Setdirection(Vehicle::South);
-            }
+            int lightsCnt = arenasCnt * LIGHTS_PER_ARENA;
+            for(int i= 0; i < lightsCnt; i++)
+                lights[i]->alternate();
 
-            if((lights[0]->Getcolor() == TrafficLight::Green && vehicles[1]->GetoffsetPosition().x <= lights[0]->GetoffsetPosition().x) || (vehicles[1]->GetoffsetPosition().x > lights[0]->GetoffsetPosition().x)){
-                vehicles[1]->move();
-            }
-            vehicles[2]->move();
         }
             break;
 
@@ -271,47 +488,170 @@ void Simulation::OnTick( wxTimerEvent& event )
             break;
 	}
 
+	std::cout << score << std::endl;
     this->Refresh();
 }
 
 void Simulation::OnClickToStart(wxMouseEvent& event)
 {
     screenState = state::settingsScreen;
+    startPanel->Hide();
+    settingsPanel->Show();
 }
 
 void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 {
 	arenasCnt = ArenaCtrl->GetValue();
-	mode = (Simulation::DriveModeType)DrivingModeCtrl->GetSelection();
+	mode = static_cast<Simulation::DriveModeType>(DrivingModeCtrl->GetSelection());
 	motorcycles = BikeSpinCtrl->GetValue();
 	cars = CarSpinCtrl->GetValue();
 	trucks = TruckSpinCtrl->GetValue();
+	//SetSizerAndFit(BoxSizer2);
+	obstacles = new Vehicle***[COLS];
+	for(int i=0; i<COLS;i++){
+        obstacles[i] = new Vehicle**[ROWS];
+        for(int j=0; j<ROWS; j++){
+            obstacles[i][j] = new Vehicle*[arenasCnt];
+            for(int k=0;k<arenasCnt;k++)
+                obstacles[i][j][k] = NULL;
+        }
+	}
 
-    mainPanel->SetScrollbars(0,10, 0, arenasCnt%2? HEIGHT*(arenasCnt+1)/20  : HEIGHT*arenasCnt/20);
+
+    mainPanel->SetScrollbars(0,10, 0, arenasCnt%2? A_HEIGHT*(arenasCnt+1)/20  : A_HEIGHT*arenasCnt/20);
     arenas = new Arena*[arenasCnt];
     int yPos = 0;
     for(int i = 0; i < arenasCnt; i++){
-        arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(WIDTH/2), yPos), wxSize(WIDTH/2,HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
+        arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(WIDTH/2), yPos), wxSize(A_WIDTH,A_HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
+        arenas[i]->CreateGrid(ROWS,COLS);
+        arenas[i]->EnableEditing(true);
+        arenas[i]->EnableGridLines(true);
+        arenas[i]->SetColLabelSize(1);
+        arenas[i]->SetRowLabelSize(1);
+        arenas[i]->SetRowMinimalAcceptableHeight(10);
+        arenas[i]->SetColMinimalAcceptableWidth(10);
+        arenas[i]->SetDefaultRowSize(15, true);
+        arenas[i]->SetDefaultColSize(15, true);
+        arenas[i]->SetRowLabelValue(0, wxEmptyString);
+        arenas[i]->SetDefaultCellFont( arenas[i]->GetFont() );
+        arenas[i]->SetDefaultCellTextColour( arenas[i]->GetForegroundColour() );
+        arenas[i]->Disable();
+
         if(i % 2)
             yPos+= HEIGHT;
     }
 
-    vehicles = new Vehicle*[cars];
-    vehicles[0] = new Car(Vehicle::East, 1, wxPoint(0,0), 1);
-    vehicles[1] = new Motorcycle(Vehicle::East, 1, wxPoint(0, 50), 1);
-    vehicles[2] = new Truck(Vehicle::North, 1, wxPoint(50, HEIGHT), 1);
+    int lightCnt = arenasCnt * LIGHTS_PER_ARENA;
+    lights = new TrafficLight*[lightCnt];
 
-	lights = new TrafficLight*[3];
-    lights[0] = new TrafficLight(TrafficLight::Green, wxPoint(30, 30), 1);
+    for(int i = 0; i < lightCnt; i++){
+        int x;
+        int y;
+        switch(i % LIGHTS_PER_ARENA){
+            case 0:
+                x = 4; y =3;
+            break;
+            case 1:
+                x = 10; y =4;
+            break;
+            case 2:
+                x = 9; y =10;
+            break;
+            default:
+                x = 3; y =9;
+        }
+        lights[i] = new TrafficLight(static_cast<TrafficLight::LightType>(i%2), wxPoint(x,y), i/LIGHTS_PER_ARENA);
+		lights[i]->Setdirection(static_cast<TrafficLight::DirectionType>(i));
+    }
 
+    vehicles = new Vehicle*[cars+trucks+motorcycles];
+
+    int total;
+
+    for(int i = 0; i < cars; i++){
+        // Get random vehicle spawn coordinates
+        randXY();
+        Vehicle::DirectionType dir;
+
+        switch(xRand){
+            case 0: dir = Vehicle::DirectionType::East; break;
+            case 13: dir = Vehicle::DirectionType::West; break;
+        }
+        switch(yRand){
+            case 0: dir = Vehicle::DirectionType::South; break;
+            case 13: dir = Vehicle::DirectionType::North; break;
+        }
+
+        total = Vehicle::Gettotal();
+
+        vehicles[total] = new Car(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+
+//        if(obstacles[xRand][yRand][vehicles[total]->getCurrentArena()] == NULL){
+//            obstacles[xRand][yRand][vehicles[total]->getCurrentArena()] = vehicles[total];
+//            MessageDialog1->SetMessage(wxT("Spot unoccupied"));
+//            MessageDialog1->ShowModal();
+//        } else {
+//            MessageDialog1->SetMessage(wxT("Spot occupied"));
+//            MessageDialog1->ShowModal();
+//        }
+
+    }
+
+    for(int i = 0; i < trucks; i++){
+        // Get random vehicle spawn coordinates
+        randXY();
+        Vehicle::DirectionType dir;
+
+        switch(xRand){
+            case 0: dir = Vehicle::DirectionType::East; break;
+            case 13: dir = Vehicle::DirectionType::West; break;
+        }
+        switch(yRand){
+            case 0: dir = Vehicle::DirectionType::South; break;
+            case 13: dir = Vehicle::DirectionType::North; break;
+        }
+
+        total = Vehicle::Gettotal();
+
+        vehicles[total] = new Truck(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+    }
+
+    for(int i = 0; i < motorcycles; i++){
+        // Get random vehicle spawn coordinates
+        randXY();
+        Vehicle::DirectionType dir;
+
+        switch(xRand){
+            case 0: dir = Vehicle::DirectionType::East; break;
+            case 13: dir = Vehicle::DirectionType::West; break;
+        }
+        switch(yRand){
+            case 0: dir = Vehicle::DirectionType::South; break;
+            case 13: dir = Vehicle::DirectionType::North; break;
+        }
+
+        total = Vehicle::Gettotal();
+
+        vehicles[total] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+    }
+
+	startPanel->Hide();
+	settingsPanel->Hide();
+	mainPanel->Show();
+	myImageGridCellRenderer* render;
+		for(int k=0; k < arenasCnt ; k++)
+		{
+			for (int l=0; l < 4 ; l++){
+			myImageGridCellRenderer *render = new myImageGridCellRenderer(grass_img);
+				arenas[k]->SetCellRenderer(	(l%3 ? 0 : 11),		(l%2 ? 0 : 11), render);
+			}
+		}
     screenState = state::runningScreen;
+
 }
 
 void Simulation::OnResize(wxSizeEvent& event)
 {
-    /*wxSize windowSize = event.GetSize();
-    int x = windowSize.GetWidth();
-    int y = windowSize.GetHeight();*/
 
 }
 
@@ -323,9 +663,3 @@ bool Simulation::start()
 void Simulation::stop()
 {
 }
-
-/* __________________Settings Event handlers ______________________				*/
-
-
-
-/* __________________End of Settings Event handlers ______________________				*/

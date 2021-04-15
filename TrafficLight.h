@@ -3,16 +3,18 @@
 
 #include "Entity.h"
 
-#define GREEN 300
-#define YELLOW 50
-#define RED 300
+#define GREEN 5
+#define YELLOW 3
+#define RED 5
 
 class TrafficLight : public Entity
 {
     public:
-        enum LightType {Green, Yellow, Red};      // declaring Green, Yellow, and Red lights
-
-        TrafficLight(LightType color, wxPoint offsetPosition, int arena);
+    	enum DirectionType {South, West, North, East};
+        enum LightType {Green, Red, Yellow};      // declaring Green, Yellow, and Red lights
+		DirectionType Getdirection() { return direction; }
+        void Setdirection(DirectionType val) { direction = val; }
+        TrafficLight(LightType color, wxPoint pos, int arena);
         virtual ~TrafficLight();
 
         LightType Getcolor() { return color; }
@@ -26,6 +28,7 @@ class TrafficLight : public Entity
     private:
         LightType color;
         int count;
+        DirectionType direction;
 };
 
 #endif // TRAFFICLIGHT_H

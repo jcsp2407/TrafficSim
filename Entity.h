@@ -4,11 +4,11 @@
 class Entity
 {
     public:
-        Entity(wxPoint offsetPosition, int arena);
+        Entity(wxPoint pos, int arena);
         virtual ~Entity();
 
-        wxPoint GetoffsetPosition() { return offsetPosition; }
-        void SetoffsetPosition(wxPoint val) { offsetPosition = val; }
+        wxPoint Getpos() { return pos; }
+        void Setpos(wxPoint val) { pos = val; }
         int Getlength() { return length; }
         void Setlength(int val) { length = val; }
         int Getwidth() { return width; }
@@ -19,9 +19,9 @@ class Entity
 
     protected:
         int currentArena;
+        wxPoint pos;
 
     private:
-        wxPoint offsetPosition;
         int length;
         int width;
 

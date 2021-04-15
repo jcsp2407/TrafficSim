@@ -23,6 +23,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 
+
 #include "Arena.h"
 #include "Car.h"
 //#include "Curb.h"
@@ -37,8 +38,27 @@
 
 #define W_WIDTH 480       // width of window
 #define WIDTH 480         // width of client area
+#define A_WIDTH 214       // width of arena
 #define W_HEIGHT 253      // height of window
 #define HEIGHT 216        // height of client area
+#define A_HEIGHT 214      // height of arena
+
+class myImageGridCellRenderer : public wxGridCellStringRenderer
+{
+public:
+    wxImage inImage;
+
+    myImageGridCellRenderer(wxImage test){
+        inImage = test;
+    }
+
+    virtual void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, const wxRect& rect, int row, int col, bool isSelected)
+    {
+        wxImage cellImage = inImage;
+        wxBitmap cellBitmap(cellImage);
+        dc.DrawBitmap(cellBitmap, rect.x, rect.y);
+    }
+};
 
 class Simulation: public wxFrame
 {
@@ -73,16 +93,16 @@ class Simulation: public wxFrame
         bool ramps;
 
         // containers
-        Entity** obstacles;
+        Vehicle**** obstacles;
         Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;
 
         enum state {startScreen, settingsScreen, runningScreen, endScreen};
 
+        wxScrolledWindow *mainPanel;
         wxPanel *startPanel;
         wxPanel *settingsPanel;
-        wxScrolledWindow *mainPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -94,6 +114,9 @@ class Simulation: public wxFrame
         wxImage traffic_img;
         wxImage sim_img;
         wxImage clicktostart_img;
+        wxImage blank_img;
+        wxImage crash_img;
+        wxImage grass_img;
 
         wxFont startScreenFont;
 
@@ -158,6 +181,7 @@ class Simulation: public wxFrame
         wxStaticText* DrivingText;
         wxStaticText* SettingsText;
         wxStaticText* TruckText;
+		wxBoxSizer* BoxSizer2;
         //*)
 
         DECLARE_EVENT_TABLE()

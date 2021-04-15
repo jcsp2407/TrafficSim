@@ -9,7 +9,7 @@ class Vehicle : public Entity
     public:
         enum DirectionType {North, South, East, West};      // declaring North, South, East, and West directions
 
-        Vehicle(DirectionType direction, int lane, wxPoint offsetPosition, int currentArena);
+        Vehicle(DirectionType direction, int lane, wxPoint pos, int currentArena);
         virtual ~Vehicle();
 
         DirectionType Getdirection() { return direction; }
@@ -26,10 +26,13 @@ class Vehicle : public Entity
         static void Settotal(int val) { total = val; }
         void goUp(){currentArena++;}
         void goDown(){currentArena--;}
+        wxPoint GetOldPos() { return oldPos; }
+        wxPoint getPosFront();
 
         virtual bool move() = 0;
 
     protected:
+        wxPoint oldPos;
 
     private:
         DirectionType direction;

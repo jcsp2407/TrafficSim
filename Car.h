@@ -8,7 +8,7 @@
 class Car : public Vehicle
 {
     public:
-        Car(DirectionType direction, int lane, wxPoint offsetPosition, int arena);
+        Car(DirectionType direction, int lane, wxPoint pos, int arena);
         virtual ~Car();
 
         static int Getcount() { return count; }

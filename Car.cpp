@@ -2,8 +2,8 @@
 
 int Car::count = 0;
 
-Car::Car(DirectionType direction, int lane, wxPoint offsetPosition, int arena):
-    Vehicle(direction, lane, offsetPosition, arena)
+Car::Car(DirectionType direction, int lane, wxPoint pos, int arena):
+    Vehicle(direction, lane, pos, arena)
 {
     Setspeed(CAR);
     // setLength(bitmap.length(x));
@@ -38,18 +38,20 @@ void Car::show()
 
 bool Car::move()
 {
+    oldPos = pos;
+
     switch(Getdirection()){
         case Vehicle::North:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y - 1));
+            Setpos(wxPoint(Getpos().x, Getpos().y - 1));
             break;
         case Vehicle::South:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y + 1));
+            Setpos(wxPoint(Getpos().x, Getpos().y + 1));
             break;
         case Vehicle::East:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x + 1, GetoffsetPosition().y));
+            Setpos(wxPoint(Getpos().x + 1, Getpos().y));
             break;
         case Vehicle::West:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x - 1, GetoffsetPosition().y));
+            Setpos(wxPoint(Getpos().x - 1, Getpos().y));
             break;
     }
 }
