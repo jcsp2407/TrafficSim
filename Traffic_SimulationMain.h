@@ -93,7 +93,7 @@ class Simulation: public wxFrame
         bool ramps;
 
         // containers
-        Entity** obstacles;
+        Vehicle**** obstacles;
         Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;

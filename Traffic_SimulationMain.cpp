@@ -340,8 +340,46 @@ void Simulation::OnTick( wxTimerEvent& event )
         {
             int total = Vehicle::Gettotal();
 
-            for(int i= 0; i < total; i++)
-                vehicles[i]->move();
+            Vehicle* temp;
+            int r_index;
+
+            for(int i= 0; i < total; i++){
+                // Shuffle vehicle for randomness
+                temp = vehicles[i];
+                r_index = (rand() % (total - i)) + i;
+                vehicles[i] = vehicles[r_index];
+                vehicles[r_index] = temp;
+
+
+                // CHECK GETPOSFRONT() AND USE PROBABILITIES FOR CRASHING
+
+                if(!vehicles[i]->Getcrossed()){
+                    // Move the shuffled vehicle if not crashed
+                    if(!vehicles[i]->Getcrashed()){
+                        obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()] = NULL;
+                        vehicles[i]->move();
+                        if((vehicles[i]->Getpos().x < 0 || vehicles[i]->Getpos().x >= COLS) || (vehicles[i]->Getpos().y < 0 || vehicles[i]->Getpos().y >= ROWS)){
+                            vehicles[i]->Setcrossed(true);
+                            score++;
+                            continue;
+                        }
+                    }
+
+                    temp = obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()];
+
+                    if(temp == NULL){
+                        obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()] = vehicles[i];
+    //                    MessageDialog1->SetMessage(wxT("Spot unoccupied"));
+    //                    MessageDialog1->ShowModal();
+                    }else{
+    //                    MessageDialog1->SetMessage(wxT("Spot occupied"));
+    //                    MessageDialog1->ShowModal();
+                          vehicles[i]->Setcrashed(true);
+                          temp->Setcrashed(true);
+                    }
+
+                }
+            }
 
             int lightsCnt = arenasCnt * LIGHTS_PER_ARENA;
             for(int i= 0; i < lightsCnt; i++)
@@ -369,6 +407,17 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 	cars = CarSpinCtrl->GetValue();
 	trucks = TruckSpinCtrl->GetValue();
 
+	obstacles = new Vehicle***[COLS];
+	for(int i=0; i<COLS;i++){
+        obstacles[i] = new Vehicle**[ROWS];
+        for(int j=0; j<ROWS; j++){
+            obstacles[i][j] = new Vehicle*[arenasCnt];
+            for(int k=0;k<arenasCnt;k++)
+                obstacles[i][j][k] = NULL;
+        }
+	}
+
+
     mainPanel->SetScrollbars(0,10, 0, arenasCnt%2? A_HEIGHT*(arenasCnt+1)/20  : A_HEIGHT*arenasCnt/20);
     arenas = new Arena*[arenasCnt];
     int yPos = 0;
@@ -376,7 +425,7 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
         arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(WIDTH/2), yPos), wxSize(A_WIDTH,A_HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
         arenas[i]->CreateGrid(ROWS,COLS);
         arenas[i]->EnableEditing(true);
-        arenas[i]->EnableGridLines(false);
+        arenas[i]->EnableGridLines(true);
         arenas[i]->SetColLabelSize(1);
         arenas[i]->SetRowLabelSize(1);
         arenas[i]->SetRowMinimalAcceptableHeight(10);
@@ -435,6 +484,16 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
         total = Vehicle::Gettotal();
 
         vehicles[total] = new Car(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+
+//        if(obstacles[xRand][yRand][vehicles[total]->getCurrentArena()] == NULL){
+//            obstacles[xRand][yRand][vehicles[total]->getCurrentArena()] = vehicles[total];
+//            MessageDialog1->SetMessage(wxT("Spot unoccupied"));
+//            MessageDialog1->ShowModal();
+//        } else {
+//            MessageDialog1->SetMessage(wxT("Spot occupied"));
+//            MessageDialog1->ShowModal();
+//        }
+
     }
 
     for(int i = 0; i < trucks; i++){
@@ -472,18 +531,7 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 
         total = Vehicle::Gettotal();
 
-        vehicles[total] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt );
-    }
-
-    // Shuffle array of vehicles
-    Vehicle* temp;
-    int r_index;
-
-    for(int i = 0; i < total; i++){
-        temp = vehicles[i];
-        r_index = rand() % total;
-        vehicles[i] = vehicles[r_index];
-        vehicles[r_index] = temp;
+        vehicles[total] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
     }
 
     screenState = state::runningScreen;
