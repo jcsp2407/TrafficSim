@@ -124,7 +124,7 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Timer
     SimTimer.SetOwner( this, ID_TIMER1 );
-    SimTimer.Start(1000, false );
+    SimTimer.Start(100, false );
 
     //Loading images
     car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
@@ -135,14 +135,16 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     trafficGreen_img.LoadFile( wxT( "green.png" ), wxBITMAP_TYPE_PNG );
     start_img.LoadFile( wxT("NEWSTART.jpg"), wxBITMAP_TYPE_ANY);
     blank_img.LoadFile( wxT("blank.png"), wxBITMAP_TYPE_ANY);
+    crash_img.LoadFile( wxT("crash.png"), wxBITMAP_TYPE_ANY);
 
     //Re-scaling images
     car_img = car_img.Rescale(100, 50).ShrinkBy(7,5);
     truck_img = truck_img.Rescale(100, 50).ShrinkBy(5,5);
-    motorcycle_img = motorcycle_img.ShrinkBy(5,5);
+    motorcycle_img = motorcycle_img.ShrinkBy(7,6);
     trafficGreen_img = trafficGreen_img.Rescale(10,25).ShrinkBy(2,2);
     trafficRed_img = trafficRed_img.Rescale(10,25).ShrinkBy(2,2);
     trafficYellow_img = trafficYellow_img.Rescale(10,25).ShrinkBy(2,2);
+    crash_img = crash_img.ShrinkBy(73,61);
 
     ramps = false;
     fullyStopped = 0;
@@ -249,55 +251,67 @@ void Simulation::OnPaint( wxPaintEvent& event )
                 dir = vehicles[i]->Getdirection();
 
                 if(dynamic_cast<Car*>(vehicles[i])){
-                    switch(dir){
-                        case Vehicle::North:
-                            img = car_img.Rotate90(false);
-                            break;
-                        case Vehicle::South:
-                            img = car_img.Rotate90(true);
-                            break;
-                        case Vehicle::West:
-                            img = car_img.Rotate180();
-                            break;
-                        default:
-                            img = car_img;
+                    if(!vehicles[i]->Getcrashed()){
+                        switch(dir){
+                            case Vehicle::North:
+                                img = car_img.Rotate90(false);
+                                break;
+                            case Vehicle::South:
+                                img = car_img.Rotate90(true);
+                                break;
+                            case Vehicle::West:
+                                img = car_img.Rotate180();
+                                break;
+                            default:
+                                img = car_img;
+                        }
+                    }else{
+                        img = crash_img;
                     }
                     render = new myImageGridCellRenderer(img);
                 }
                 else if(dynamic_cast<Truck*>(vehicles[i])){
-                    switch(dir){
-                        case Vehicle::North:
-                            img = truck_img.Rotate90(false);
-                            break;
-                        case Vehicle::South:
-                            img = truck_img.Rotate90(true);
-                            break;
-                        case Vehicle::West:
-                            img = truck_img.Rotate180();
-                            break;
-                        default:
-                            img = truck_img;
+                    if(!vehicles[i]->Getcrashed()){
+                        switch(dir){
+                            case Vehicle::North:
+                                img = truck_img.Rotate90(false);
+                                break;
+                            case Vehicle::South:
+                                img = truck_img.Rotate90(true);
+                                break;
+                            case Vehicle::West:
+                                img = truck_img.Rotate180();
+                                break;
+                            default:
+                                img = truck_img;
+                        }
+                    }else{
+                        img = crash_img;
                     }
                     render = new myImageGridCellRenderer(img);
                 }else if(dynamic_cast<Motorcycle*>(vehicles[i])){
-                    switch(dir){
-                        case Vehicle::North:
-                            img = motorcycle_img.Rotate90(false);
-                            break;
-                        case Vehicle::South:
-                            img = motorcycle_img.Rotate90(true);
-                            break;
-                        case Vehicle::West:
-                            img = motorcycle_img.Rotate180();
-                            break;
-                        default:
-                            img = motorcycle_img;
+                    if(!vehicles[i]->Getcrashed()){
+                        switch(dir){
+                            case Vehicle::North:
+                                img = motorcycle_img.Rotate90(false);
+                                break;
+                            case Vehicle::South:
+                                img = motorcycle_img.Rotate90(true);
+                                break;
+                            case Vehicle::West:
+                                img = motorcycle_img.Rotate180();
+                                break;
+                            default:
+                                img = motorcycle_img;
+                        }
+                    }else{
+                        img = crash_img;
                     }
                     render = new myImageGridCellRenderer(img);
                 }
 
-                arenas[a]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
-                arenas[a]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
+                    arenas[a]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(blank_img));
+                    arenas[a]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
             }
 
             int lightCnt = arenasCnt * LIGHTS_PER_ARENA;
@@ -343,6 +357,8 @@ void Simulation::OnTick( wxTimerEvent& event )
             Vehicle* temp;
             int r_index;
 
+            int x, y, arena;
+
             for(int i= 0; i < total; i++){
                 // Shuffle vehicle for randomness
                 temp = vehicles[i];
@@ -357,27 +373,59 @@ void Simulation::OnTick( wxTimerEvent& event )
                     // Move the shuffled vehicle if not crashed
                     if(!vehicles[i]->Getcrashed()){
                         obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()] = NULL;
-                        vehicles[i]->move();
-                        if((vehicles[i]->Getpos().x < 0 || vehicles[i]->Getpos().x >= COLS) || (vehicles[i]->Getpos().y < 0 || vehicles[i]->Getpos().y >= ROWS)){
+
+                        x = vehicles[i]->getPosFront().x;
+                        y = vehicles[i]->getPosFront().y;
+                        arena = vehicles[i]->getCurrentArena();
+
+                        if((x < 0 || x >= COLS) || (y < 0 || y >= ROWS)){
+                            vehicles[i]->move();
                             vehicles[i]->Setcrossed(true);
                             score++;
                             continue;
                         }
+
+                        temp = obstacles[x][y][arena];
+
+                        if(temp == NULL){
+                            vehicles[i]->move();
+                            obstacles[x][y][arena] = vehicles[i];
+        //                    MessageDialog1->SetMessage(wxT("Spot unoccupied"));
+        //                    MessageDialog1->ShowModal();
+                        }else{
+        //                    MessageDialog1->SetMessage(wxT("Spot occupied"));
+        //                    MessageDialog1->ShowModal();
+                            int r;
+                            switch(mode){
+                                case Average: // Crazy = 10% crashing probability
+                                    r = rand() % 10;
+                                    if(!r){
+                                        vehicles[i]->move();
+                                        vehicles[i]->Setcrashed(true);
+                                        temp->Setcrashed(true);
+                                    }
+                                    break;
+                                case Crazy: // Crazy = 25% crashing probability
+                                    r = rand() % 4;
+                                    if(!r){
+                                        vehicles[i]->move();
+                                        vehicles[i]->Setcrashed(true);
+                                        temp->Setcrashed(true);
+                                    }
+                                    break;
+                                case FromMiami: // FromMiami = 50% crashing probability
+                                    r = rand() % 2;
+                                    if(!r){
+                                        vehicles[i]->move();
+                                        vehicles[i]->Setcrashed(true);
+                                        temp->Setcrashed(true);
+                                    }
+                                    break;
+                                default:    // Safe = 0% crashing probability
+                                    break;
+                            }
+                        }
                     }
-
-                    temp = obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()];
-
-                    if(temp == NULL){
-                        obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()] = vehicles[i];
-    //                    MessageDialog1->SetMessage(wxT("Spot unoccupied"));
-    //                    MessageDialog1->ShowModal();
-                    }else{
-    //                    MessageDialog1->SetMessage(wxT("Spot occupied"));
-    //                    MessageDialog1->ShowModal();
-                          vehicles[i]->Setcrashed(true);
-                          temp->Setcrashed(true);
-                    }
-
                 }
             }
 
@@ -391,6 +439,7 @@ void Simulation::OnTick( wxTimerEvent& event )
             break;
 	}
 
+	std::cout << score << std::endl;
     this->Refresh();
 }
 

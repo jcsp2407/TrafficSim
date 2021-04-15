@@ -53,17 +53,3 @@ bool Motorcycle::move(){
             break;
     }
 }
-
-wxPoint Motorcycle::getPosFront()
-{
-    switch(Getdirection()){
-        case Vehicle::North:
-            return wxPoint(Getpos().x, Getpos().y - 1);
-        case Vehicle::South:
-            return wxPoint(Getpos().x, Getpos().y + 1);
-        case Vehicle::East:
-            return wxPoint(Getpos().x + 1, Getpos().y);
-        case Vehicle::West:
-            return wxPoint(Getpos().x - 1, Getpos().y);
-    }
-}

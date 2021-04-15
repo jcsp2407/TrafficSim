@@ -16,7 +16,6 @@ class Truck : public Vehicle
 
         void show() override;
         bool move() override;
-        wxPoint getPosFront();
 
     protected:
 

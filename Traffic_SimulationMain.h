@@ -115,6 +115,7 @@ class Simulation: public wxFrame
         wxImage sim_img;
         wxImage clicktostart_img;
         wxImage blank_img;
+        wxImage crash_img;
 
         wxFont startScreenFont;
 
