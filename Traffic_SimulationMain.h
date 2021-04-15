@@ -38,9 +38,10 @@
 
 #define W_WIDTH 480       // width of window
 #define WIDTH 480         // width of client area
+#define A_WIDTH 214       // width of arena
 #define W_HEIGHT 253      // height of window
 #define HEIGHT 216        // height of client area
-
+#define A_HEIGHT 214      // height of arena
 
 class myImageGridCellRenderer : public wxGridCellStringRenderer
 {
@@ -57,8 +58,6 @@ public:
         wxBitmap cellBitmap(cellImage);
         dc.DrawBitmap(cellBitmap, rect.x, rect.y);
     }
-
-
 };
 
 class Simulation: public wxFrame
@@ -94,16 +93,16 @@ class Simulation: public wxFrame
         bool ramps;
 
         // containers
-        Entity** obstacles;
+        Entity**** obstacles;
         Arena** arenas;
         TrafficLight** lights;
         Vehicle** vehicles;
 
         enum state {startScreen, settingsScreen, runningScreen, endScreen};
 
+        wxScrolledWindow *mainPanel;
         wxPanel *startPanel;
         wxPanel *settingsPanel;
-        wxScrolledWindow *mainPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -116,6 +115,7 @@ class Simulation: public wxFrame
         wxImage sim_img;
         wxImage clicktostart_img;
         wxImage blank_img;
+        wxMessageDialog* MessageDialog1;
 
         wxFont startScreenFont;
 

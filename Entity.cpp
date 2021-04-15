@@ -1,8 +1,8 @@
 #include "Entity.h"
 
-Entity::Entity(wxPoint offsetPosition, int arena)
+Entity::Entity(wxPoint pos, int arena)
 {
-    this->offsetPosition = offsetPosition;
+    this->pos = pos;
     currentArena = arena;
 }
 

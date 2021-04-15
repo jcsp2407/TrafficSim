@@ -1,7 +1,7 @@
 #include "TrafficLight.h"
 
-TrafficLight::TrafficLight(LightType color, wxPoint offsetPosition, int arena):
-     Entity(offsetPosition, arena)
+TrafficLight::TrafficLight(LightType color, wxPoint pos, int arena):
+     Entity(pos, arena)
 {
     this->color = color;
     count = 0;

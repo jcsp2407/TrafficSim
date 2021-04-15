@@ -2,8 +2,8 @@
 
 int Motorcycle::count = 0;
 
-Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint offsetPosition, int arena):
-    Vehicle(direction, lane, offsetPosition, arena)
+Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint pos, int arena):
+    Vehicle(direction, lane, pos, arena)
 {
     Setspeed(MOTORCYCLE);
     // setLength(bitmap.length(x));
@@ -36,18 +36,20 @@ void Motorcycle::show(){
 }
 
 bool Motorcycle::move(){
+    oldPos = pos;
+
         switch(Getdirection()){
         case Vehicle::North:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y - 1));
+            Setpos(wxPoint(Getpos().x, Getpos().y - 1));
             break;
         case Vehicle::South:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x, GetoffsetPosition().y + 1));
+            Setpos(wxPoint(Getpos().x, Getpos().y + 1));
             break;
         case Vehicle::East:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x + 1, GetoffsetPosition().y));
+            Setpos(wxPoint(Getpos().x + 1, Getpos().y));
             break;
         case Vehicle::West:
-            SetoffsetPosition(wxPoint(GetoffsetPosition().x - 1, GetoffsetPosition().y));
+            Setpos(wxPoint(Getpos().x - 1, Getpos().y));
             break;
     }
 }
