@@ -102,7 +102,6 @@ class Simulation: public wxFrame
 
         wxScrolledWindow *mainPanel;
         wxPanel *startPanel;
-        wxPanel *settingsPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -170,7 +169,6 @@ class Simulation: public wxFrame
         wxButton* BeginButton;
         wxChoice* DrivingModeCtrl;
         wxPanel* SettingPanel2;
-        wxPanel* SettingPanel;
         wxSpinCtrl* ArenaCtrl;
         wxSpinCtrl* BikeSpinCtrl;
         wxSpinCtrl* CarSpinCtrl;

@@ -23,34 +23,34 @@
 #define COLS 14
 #define LIGHTS_PER_ARENA 4
 
-unsigned int random_list[] = {0,3,4,5,6,7,8,9,10,13};
+unsigned int random_list[] = {0,4,5,6,7,8,9,13};
 
 // Randomly spawn vehicle coordinates
 int xRand, yRand;
 
 void randXY(){
-    int r = random_list[rand() % 10];
+    int r = random_list[rand() % 8];
 
     if(rand() % 2){
         xRand = r;
         if(xRand == 0)
-            yRand = rand() % 4 + 7;
+            yRand = rand() % 3 + 7;
         else if(xRand <= 6)
             yRand = 0;
-        else if(xRand <= 10)
+        else if(xRand <= 9)
             yRand = 13;
         else
-            yRand = rand() % 4 + 3;
+            yRand = rand() % 3 + 4;
     }else{
         yRand = r;
         if(yRand == 0)
-            xRand = rand() % 4 + 3;
+            xRand = rand() % 3 + 4;
         else if(yRand <= 6)
             xRand = 13;
-        else if(yRand <= 10)
+        else if(yRand <= 9)
             xRand = 0;
         else
-            xRand = rand() % 4 + 7;
+            xRand = rand() % 3 + 7;
     }
 }
 
@@ -131,7 +131,7 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Timer
     SimTimer.SetOwner( this, ID_TIMER1 );
-    SimTimer.Start(200, false );
+    SimTimer.Start(1000, false );
 
     //Loading images
     car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
@@ -147,14 +147,16 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Re-scaling images
     car_img = car_img.Rescale(100, 50).ShrinkBy(7,5);
+//	car_img = car_img.Rescale(100, 50).ShrinkBy(14,10);
     truck_img = truck_img.Rescale(100, 50).ShrinkBy(5,5);
     motorcycle_img = motorcycle_img.ShrinkBy(7,6);
     trafficGreen_img = trafficGreen_img.Rescale(10,25).ShrinkBy(2,2);
     trafficRed_img = trafficRed_img.Rescale(10,25).ShrinkBy(2,2);
     trafficYellow_img = trafficYellow_img.Rescale(10,25).ShrinkBy(2,2);
     crash_img = crash_img.ShrinkBy(73,61);
-	grass_img = grass_img.ShrinkBy(8,8);
-
+	//grass_img = grass_img.ShrinkBy(8,8);
+	grass_img = grass_img.ShrinkBy(6,6);
+	//blank_img = blank_img.ShrinkBy(10,10);
     ramps = false;
     fullyStopped = 0;
     score = 0;
@@ -166,8 +168,8 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     wxBoxSizer* BoxSizer1;
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-	BoxSizer1->Add(startPanel, 1, wxALL|wxEXPAND, 0);
-	SetSizer(BoxSizer1);
+	BoxSizer1->Add(startPanel, 1, wxALL|wxEXPAND);
+	SetSizerAndFit(BoxSizer1);
 
     screenState = state::startScreen;
 
@@ -176,9 +178,8 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     /* Settings Panel Config */
 
-    settingsPanel = new wxPanel(this, ID_PANEL1, wxPoint(0,0), wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL, _T("ID_PANEL1"));
     BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-    SettingPanel2 = new wxPanel(settingsPanel, ID_PANEL3, wxDefaultPosition, wxSize(491,261), wxTAB_TRAVERSAL, _T("ID_PANEL3"));
+    SettingPanel2 = new wxPanel(this, ID_PANEL3, wxDefaultPosition, wxSize(491,261), wxTAB_TRAVERSAL, _T("ID_PANEL3"));
     SettingPanel2->SetBackgroundColour(wxColour(184,243,243));
     ArenaCtrl = new wxSpinCtrl(SettingPanel2, ID_ArenaCtrl, _T("1"), wxPoint(16,64), wxSize(120,30), wxALIGN_RIGHT, 1, 10, 1, _T("ID_ArenaCtrl"));
     ArenaCtrl->SetValue(_T("1"));
@@ -202,9 +203,8 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     SettingsText->SetFont(SettingsTextFont);
     BikeText = new wxStaticText(SettingPanel2, ID_STATICTEXT6, _("Number of Motorcycles"), wxPoint(176,128), wxDefaultSize, 0, _T("ID_STATICTEXT6"));
     BeginButton = new wxButton(SettingPanel2, ID_BeginButton, _("Begin!"), wxPoint(168,152), wxSize(136,40), 0, wxDefaultValidator, _T("ID_BeginButton"));
-    BoxSizer2->Add(SettingPanel2, 1, wxALL|wxEXPAND, 0);
-    settingsPanel->SetSizer(BoxSizer2);
-	settingsPanel->Hide();
+	BoxSizer2->Add(SettingPanel2, 1, wxALL|wxEXPAND);
+	SettingPanel2->Hide();
 
     //connect settings event handlers
     Connect(ID_BeginButton,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Simulation::OnBeginButtonClick);
@@ -234,14 +234,15 @@ void Simulation::OnPaint( wxPaintEvent& event )
         }
             break;
 
-        case state::settingsScreen:
-        {
-
-        }
-            break;
+//        case state::settingsScreen:
+//        {
+//
+//        }
+//            break;
 
         case state::runningScreen:
         {
+
             int total = Vehicle::Gettotal();
             int a;
             Vehicle::DirectionType dir;
@@ -377,7 +378,11 @@ void Simulation::OnPaint( wxPaintEvent& event )
                 arenas[i/LIGHTS_PER_ARENA]->SetCellRenderer(lights[i]->Getpos().y, lights[i]->Getpos().x, render);
 
             }
-              //  		myImageGridCellRenderer* render;
+		for(int k=0; k < arenasCnt ; k++)
+		{
+			myImageGridCellRenderer *render = new myImageGridCellRenderer(grass_img);
+				arenas[k]->SetCellRenderer(	0,0, render);
+		}
 
         }
             break;
@@ -481,6 +486,7 @@ void Simulation::OnTick( wxTimerEvent& event )
             for(int i= 0; i < lightsCnt; i++)
                 lights[i]->alternate();
 
+
         }
             break;
 
@@ -494,9 +500,11 @@ void Simulation::OnTick( wxTimerEvent& event )
 
 void Simulation::OnClickToStart(wxMouseEvent& event)
 {
+
+	SetSizerAndFit(BoxSizer2);
     screenState = state::settingsScreen;
     startPanel->Hide();
-    settingsPanel->Show();
+	SettingPanel2->Show();
 }
 
 void Simulation::OnBeginButtonClick(wxCommandEvent& event)
@@ -506,7 +514,6 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 	motorcycles = BikeSpinCtrl->GetValue();
 	cars = CarSpinCtrl->GetValue();
 	trucks = TruckSpinCtrl->GetValue();
-	//SetSizerAndFit(BoxSizer2);
 	obstacles = new Vehicle***[COLS];
 	for(int i=0; i<COLS;i++){
         obstacles[i] = new Vehicle**[ROWS];
@@ -525,7 +532,7 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
         arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(WIDTH/2), yPos), wxSize(A_WIDTH,A_HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
         arenas[i]->CreateGrid(ROWS,COLS);
         arenas[i]->EnableEditing(true);
-        arenas[i]->EnableGridLines(true);
+        arenas[i]->EnableGridLines(false);
         arenas[i]->SetColLabelSize(1);
         arenas[i]->SetRowLabelSize(1);
         arenas[i]->SetRowMinimalAcceptableHeight(10);
@@ -549,16 +556,16 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
         int y;
         switch(i % LIGHTS_PER_ARENA){
             case 0:
-                x = 4; y =3;
+                x = 5; y =4;
             break;
             case 1:
-                x = 10; y =4;
+                x = 9; y =5;
             break;
             case 2:
-                x = 9; y =10;
+                x = 8; y =9;
             break;
             default:
-                x = 3; y =9;
+                x = 4; y =8;
         }
         lights[i] = new TrafficLight(static_cast<TrafficLight::LightType>(i%2), wxPoint(x,y), i/LIGHTS_PER_ARENA);
 		lights[i]->Setdirection(static_cast<TrafficLight::DirectionType>(i));
@@ -585,16 +592,6 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
         total = Vehicle::Gettotal();
 
         vehicles[total] = new Car(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
-
-//        if(obstacles[xRand][yRand][vehicles[total]->getCurrentArena()] == NULL){
-//            obstacles[xRand][yRand][vehicles[total]->getCurrentArena()] = vehicles[total];
-//            MessageDialog1->SetMessage(wxT("Spot unoccupied"));
-//            MessageDialog1->ShowModal();
-//        } else {
-//            MessageDialog1->SetMessage(wxT("Spot occupied"));
-//            MessageDialog1->ShowModal();
-//        }
-
     }
 
     for(int i = 0; i < trucks; i++){
@@ -636,14 +633,14 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
     }
 
 	startPanel->Hide();
-	settingsPanel->Hide();
+	SettingPanel2->Hide();
 	mainPanel->Show();
 	myImageGridCellRenderer* render;
 		for(int k=0; k < arenasCnt ; k++)
 		{
 			for (int l=0; l < 4 ; l++){
 			myImageGridCellRenderer *render = new myImageGridCellRenderer(grass_img);
-				arenas[k]->SetCellRenderer(	(l%3 ? 0 : 11),		(l%2 ? 0 : 11), render);
+				arenas[k]->SetCellRenderer(	(l%3 ? 0 : 10),		(l%2 ? 0 : 10), render);
 			}
 		}
     screenState = state::runningScreen;
