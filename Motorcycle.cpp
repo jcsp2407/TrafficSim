@@ -13,8 +13,9 @@ Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint pos, int arena
 
 Motorcycle::~Motorcycle()
 {
-    //dtor
+    count--;
 }
+
 
 void Motorcycle::show(){
     std::string dirStr;

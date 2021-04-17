@@ -10,7 +10,7 @@
 class TrafficLight : public Entity
 {
     public:
-    	enum DirectionType {South, West, North, East};
+    	enum DirectionType {North, East, South, West};
         enum LightType {Green, Red, Yellow};      // declaring Green, Yellow, and Red lights
 		DirectionType Getdirection() { return direction; }
         void Setdirection(DirectionType val) { direction = val; }

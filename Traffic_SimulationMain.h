@@ -77,6 +77,9 @@ class Simulation: public wxFrame
         void Incscore() { score++; }
         bool start();
         void stop();
+		void Crashed(Vehicle* V, Vehicle* temp);
+		bool IsGonnaCrash(Vehicle* V);
+		void compute(Vehicle*);
 
     private:
 
