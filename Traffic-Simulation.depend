@@ -2526,13 +2526,13 @@
 	"Truck.h"
 	"Vehicle.h"
 
-1618422581 /home/adrian/Downloads/p6/Embedded-GUI-Project/TrafficLight.h
+1618754109 /home/adrian/Downloads/p6/Embedded-GUI-Project/TrafficLight.h
 	"Entity.h"
 
 1618696450 /home/adrian/Downloads/p6/Embedded-GUI-Project/Truck.h
 	"Vehicle.h"
 
-1618704103 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+1618752534 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/Traffic_SimulationMain.cpp
 	"Traffic_SimulationMain.h"
 	"Arena.h"
 	"Traffic_SimulationApp.h"
@@ -2541,7 +2541,7 @@
 	<wx/string.h>
 	<time.h>
 
-1618373274 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/TrafficLight.cpp
+1618754568 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/TrafficLight.cpp
 	"TrafficLight.h"
 
 1618696450 source:/home/adrian/Downloads/p6/Embedded-GUI-Project/Truck.cpp

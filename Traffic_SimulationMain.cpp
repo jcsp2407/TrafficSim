@@ -132,7 +132,7 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Timer
     SimTimer.SetOwner( this, ID_TIMER1 );
-    SimTimer.Start(100, false );
+    SimTimer.Start(1000, false );
 
     //Loading images
     car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
