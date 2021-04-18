@@ -2,6 +2,8 @@
 
 int Truck::count = 0;
 
+int Truck::totalCrossed = 0;
+
 Truck::Truck(DirectionType direction, int lane, wxPoint pos, int arena):
     Vehicle(direction, lane, pos, arena)
 {
@@ -15,7 +17,6 @@ Truck::~Truck()
 {
     count--;
 }
-
 
 void Truck::show()
 {

@@ -4,7 +4,10 @@ TrafficLight::TrafficLight(LightType color, wxPoint pos, int arena):
      Entity(pos, arena)
 {
     this->color = color;
-    count = 0;
+    if(color == LightType::Red)
+        count = 1;
+    else
+        count = 0;
     // setLength(bitmap.length(x));
     // setWidth(bitmap.length(y));
 }
@@ -20,7 +23,7 @@ void TrafficLight::alternate()
         case Green:
             if(count >= GREEN){
                 color = Yellow;
-                count = 0;
+                count = 1;
             }else{
                 count++;
             }
@@ -28,7 +31,7 @@ void TrafficLight::alternate()
         case Yellow:
             if(count >= YELLOW){
                 color = Red;
-                count = 0;
+                count = 1;
             }else{
                 count++;
             }
@@ -36,7 +39,7 @@ void TrafficLight::alternate()
         case Red:
             if(count >= RED){
                 color = Green;
-                count = 0;
+                count = 1;
             }else{
                 count++;
             }

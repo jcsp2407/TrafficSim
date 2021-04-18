@@ -2558,10 +2558,10 @@
 1618501361 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Arena.h
 	<wx/grid.h>
 
-1618677094 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Car.cpp
+1618763149 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Car.cpp
 	"Car.h"
 
-1618501361 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Car.h
+1618764976 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Car.h
 	"Vehicle.h"
 
 1618501361 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Vehicle.h
@@ -2578,10 +2578,10 @@
 1618501361 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Entity.cpp
 	"Entity.h"
 
-1618677403 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Motorcycle.cpp
+1618763129 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Motorcycle.cpp
 	"Motorcycle.h"
 
-1618501361 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Motorcycle.h
+1618764976 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Motorcycle.h
 	"Vehicle.h"
 
 1618501361 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Ramp.cpp
@@ -2604,7 +2604,7 @@
 	<wx/app.h>
 	"Traffic_SimulationMain.h"
 
-1618696481 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Traffic_SimulationMain.h
+1618765525 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Traffic_SimulationMain.h
 	<wx/frame.h>
 	<wx/menu.h>
 	<wx/statusbr.h>
@@ -2624,16 +2624,16 @@
 	"Truck.h"
 	"Vehicle.h"
 
-1618678273 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/TrafficLight.h
+1618703115 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/TrafficLight.h
 	"Entity.h"
 
-1618501361 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Truck.h
+1618764976 /home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Truck.h
 	"Vehicle.h"
 
-1618501361 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/TrafficLight.cpp
+1618763003 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/TrafficLight.cpp
 	"TrafficLight.h"
 
-1618677403 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Truck.cpp
+1618763087 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Truck.cpp
 	"Truck.h"
 
 1618501361 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Vehicle.cpp
@@ -2643,7 +2643,7 @@
 	<wx/wxprec.h>
 	<wx/wx.h>
 
-1618698478 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Traffic_SimulationMain.cpp
+1618768707 source:/home/juan/Desktop/Embedded-GUI-Project/Current/Embedded-GUI-Project/Traffic_SimulationMain.cpp
 	"Traffic_SimulationMain.h"
 	"Arena.h"
 	"Traffic_SimulationApp.h"

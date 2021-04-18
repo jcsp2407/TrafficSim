@@ -38,9 +38,11 @@
 
 #define W_WIDTH 480       // width of window
 #define WIDTH 480         // width of client area
+#define R_WIDTH 430         // width of running panel
 #define A_WIDTH 214       // width of arena
 #define W_HEIGHT 253      // height of window
 #define HEIGHT 216        // height of client area
+#define R_HEIGHT 216        // height of running panel
 #define A_HEIGHT 214      // height of arena
 
 class myImageGridCellRenderer : public wxGridCellStringRenderer
@@ -54,9 +56,24 @@ public:
 
     virtual void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, const wxRect& rect, int row, int col, bool isSelected)
     {
+		dc.SetPen(*wxGREY_PEN);
+        dc.SetBrush(*wxGREY_BRUSH);
+        dc.DrawRectangle(rect);
+
         wxImage cellImage = inImage;
         wxBitmap cellBitmap(cellImage);
         dc.DrawBitmap(cellBitmap, rect.x, rect.y);
+    }
+};
+
+class RoadGridCellRenderer : public wxGridCellStringRenderer
+{
+public:
+    virtual void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, const wxRect& rect, int row, int col, bool isSelected)
+    {
+        dc.SetPen(*wxGREY_PEN);
+        dc.SetBrush(*wxGREY_BRUSH);
+        dc.DrawRectangle(rect);
     }
 };
 
@@ -68,9 +85,6 @@ class Simulation: public wxFrame
         virtual ~Simulation();
 
         enum DriveModeType { Safe, Average, Crazy, FromMiami};      // declaring Safe, Average, and Crazy drive modes
-     //   void Setmode(DriveModeType val) { mode = val; }
-        bool Getramps() { return ramps; }
-        void Setramps(bool val) { ramps = val; }
         int GetfullyStopped() { return fullyStopped; }
         void IncfullyStopped() { fullyStopped++; }
         int Getscore() { return score; }
@@ -91,9 +105,9 @@ class Simulation: public wxFrame
         int score;
         int speed;
         int screenState;
+		int time_per_sec;
 
         DriveModeType mode;
-        bool ramps;
 
         // containers
         Vehicle**** obstacles;
@@ -105,6 +119,8 @@ class Simulation: public wxFrame
 
         wxScrolledWindow *mainPanel;
         wxPanel *startPanel;
+        wxPanel *scorePanel;
+        wxPanel *endPanel;
 
         wxImage car_img;
         wxImage truck_img;
@@ -113,12 +129,15 @@ class Simulation: public wxFrame
         wxImage trafficGreen_img;
         wxImage trafficYellow_img;
         wxImage start_img;
-        wxImage traffic_img;
-        wxImage sim_img;
-        wxImage clicktostart_img;
-        wxImage blank_img;
+        wxImage end_img;
+        wxImage simend_img;
         wxImage crash_img;
         wxImage grass_img;
+        wxImage grassmedianN_img;
+        wxImage grassmedianE_img;
+        wxImage grassmedianS_img;
+        wxImage grassmedianW_img;
+        wxImage grey_img;
 
         wxFont startScreenFont;
 
@@ -130,6 +149,7 @@ class Simulation: public wxFrame
         void OnEraseBackground(wxEraseEvent& event);
         void OnClickToStart(wxMouseEvent& event);
         void OnResize(wxSizeEvent& event);
+        void OnCloseSimClick(wxCommandEvent& event);
 
 		///settings panel
 
@@ -144,7 +164,9 @@ class Simulation: public wxFrame
         static const long ID_TIMER1;
         static const long ID_STARTPANEL;
         static const long ID_MAINPANEL;
-
+		static const long ID_SCOREPANEL;
+        static const long ID_ENDPANEL;
+		static const long ID_CloseSimButton;
 
         ///identifiers for settings panel
 		static const long ID_ArenaCtrl;
@@ -161,6 +183,16 @@ class Simulation: public wxFrame
         static const long ID_BeginButton;
         static const long ID_PANEL3;
         static const long ID_PANEL1;
+
+        //identifiers for end panel
+        static const long ID_STATICTEXT7;
+        static const long ID_STATICTEXT8;
+        static const long ID_STATICTEXT9;
+        static const long ID_STATICTEXT10;
+        static const long ID_STATICTEXT11;
+        static const long ID_ENDTEXT;
+        static const long ID_GAUGE1;
+        static const long ID_GAUGE2;
         //*)
 
         //(*Declarations(Simulation)
@@ -183,6 +215,18 @@ class Simulation: public wxFrame
         wxStaticText* SettingsText;
         wxStaticText* TruckText;
 		wxBoxSizer* BoxSizer2;
+		wxStaticText* CarCountText;
+        wxStaticText* TruckCountText;
+        wxStaticText* MotorcycleCountText;
+        wxStaticText* ScoreText;
+        wxStaticText* TimeText;
+        wxStaticText* EndText;
+        wxGauge* scoreG;
+        wxGauge* timeG;
+
+		//end screen declarations
+		wxButton* CloseSimButton;
+
         //*)
 
         DECLARE_EVENT_TABLE()
