@@ -58,12 +58,12 @@ void Simulation::Crashed(Vehicle* V, Vehicle* temp){
 
 	int r;
 	switch(mode){
+
 		case Average: // Crazy = 10% crashing probability
 			r = rand() % 10;
 			if(!r){
 				obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
 				V->move();
-				obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
 				V->Setcrashed(true);
 				temp->Setcrashed(true);
 			}
@@ -74,7 +74,6 @@ void Simulation::Crashed(Vehicle* V, Vehicle* temp){
 			if(!r){
 				obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
 				V->move();
-				obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
 				V->Setcrashed(true);
 				temp->Setcrashed(true);
 			}
@@ -85,7 +84,6 @@ void Simulation::Crashed(Vehicle* V, Vehicle* temp){
 			if(!r){
 				obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
 				V->move();
-				obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
 				V->Setcrashed(true);
 				temp->Setcrashed(true);
 			}
@@ -97,22 +95,18 @@ void Simulation::Crashed(Vehicle* V, Vehicle* temp){
 }
 
 bool Simulation::IsGonnaCrash(Vehicle* V){
-	int x,y, arena;
-	x = V->getPosFront().x;
-	y = V->getPosFront().y;
-	arena = V->getCurrentArena();
 
-	Vehicle* temp = obstacles[x][y][arena];
+	Vehicle* temp = obstacles[V->getPosFront().x][V->getPosFront().y][V->getCurrentArena()]; //set temp to position in front
 
-	if(temp){
-		Crashed(V, temp);
-		if(V->Getcrashed())
-			return 1;
+	if(temp){ //if there is something in front of the car
+		Crashed(V, temp);	//call function in charge of making crashing decision
+		if(V->Getcrashed()) //check if it will crash based on mode
+			return 1; //if so, return 1. Meaning it has crashed
 		else
-			return 0;
+			return 0; //otherwise, not gonna crash
 	}
 	else
-		return 0;
+		return 0; //otherwise, not gonna crash
 }
 
 
@@ -152,17 +146,16 @@ void Simulation::compute(Vehicle* V){
 							Past_Light = true;
 						break;
 			}
+if(!IsGonnaCrash(V)){
 
 		if(!Past_Light)
 		{
 			switch(TL->Getcolor()){
 
 				case TrafficLight::LightType::Green :
-					if(!IsGonnaCrash(V)){
-						obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
-						V->move();
-						obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
-					}
+					obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
+					V->move();
+					obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
 					break;
 
 				case TrafficLight::LightType::Yellow :
@@ -171,50 +164,45 @@ void Simulation::compute(Vehicle* V){
 				                    break;
 
 				               default:    // Normal people drive on Yellow
-									if(!IsGonnaCrash(V)){
-										obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
-										V->move();
-										obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
-									}
+									obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
+									V->move();
+									obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
 				                    break;
                             }
+					break;
 
 				case TrafficLight::LightType::Red :
 					switch(Simulation::mode){
+			               case Crazy: // Crazy = 25% Skip Red
+			                    r = rand() % 4;
+			                    if(!r){
+										obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
+										V->move();
+										obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
+			                    }
+			                    break;
 
-				               case Crazy: // Crazy = 25% Skip Red
-				                    r = rand() % 4;
-				                    if(!r){
-										if(!IsGonnaCrash(V)){
-											obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
-											V->move();
-											obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
-										}
-				                    }
-				                    break;
+			               case FromMiami: // FromMiami = 50% Skip Red
+			                    r = rand() % 2;
+			                    if(!r){
+										obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
+										V->move();
+										obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
+			                    }
+			                    break;
 
-				               case FromMiami: // FromMiami = 50% Skip Red
-				                    r = rand() % 2;
-				                    if(!r){
-										if(!IsGonnaCrash(V))
-				                        V->move();
-				                    }
-				                    break;
-
-				               default:    // Safe Stop on Red
-				                    break;
+			               default:    // Safe Stop on Red
+			                    break;
                             }
 					break;
 			}
 		}
 		else{
-			if(!IsGonnaCrash(V))
-				{
 					obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = NULL;
 					V->move();
 					obstacles[V->Getpos().x][V->Getpos().y][V->getCurrentArena()] = V;
-				}
 		}
+}
 }
 
 
@@ -470,7 +458,6 @@ void Simulation::OnPaint( wxPaintEvent& event )
             }
 
             int total = Vehicle::Gettotal();
-            int a;
             Vehicle::DirectionType dir;
             wxImage img;
             myImageGridCellRenderer* render;
@@ -478,7 +465,6 @@ void Simulation::OnPaint( wxPaintEvent& event )
             for(int i = 0; i < total; i++){
 				if(vehicles[i]!= NULL){
                     if(!vehicles[i]->Getcrashed()){
-						a = vehicles[i]->getCurrentArena();
 						dir = vehicles[i]->Getdirection();
 
                 if(dynamic_cast<Car*>(vehicles[i])){
@@ -531,15 +517,17 @@ void Simulation::OnPaint( wxPaintEvent& event )
 						}
 						render = new myImageGridCellRenderer(img);
                 }
+
+            if( (obstacles[vehicles[i]->GetOldPos().x][vehicles[i]->GetOldPos().y][vehicles[i]->getCurrentArena()] == NULL) || vehicles[i]->Getcrossed()	)
+				arenas[vehicles[i]->getCurrentArena()]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(grey_img));
+			arenas[vehicles[i]->getCurrentArena()]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
             }
             else{
 				render = new myImageGridCellRenderer(crash_img);
+				arenas[vehicles[i]->getCurrentArena()]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
             }
 
-            if( (obstacles[vehicles[i]->GetOldPos().x][vehicles[i]->GetOldPos().y][a] == NULL) || vehicles[i]->Getcrossed()	)
-				arenas[a]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(grey_img));
 
-			arenas[a]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
             }
 			}
 
@@ -639,9 +627,6 @@ void Simulation::OnTick( wxTimerEvent& event )
 
             Vehicle* temp;
             int r_index;
-
-            int x, y, arena;
-
             for(int i= 0; i < total; i++){
                 // Shuffle vehicle for randomness
                 temp = vehicles[i];
@@ -653,14 +638,17 @@ void Simulation::OnTick( wxTimerEvent& event )
 				if(vehicles[i] != NULL){
                 if(!vehicles[i]->Getcrossed()){
                     // Move the shuffled vehicle if not crashed
+
                     if(!vehicles[i]->Getcrashed()){
-						x = vehicles[i]->getPosFront().x;
-                        y = vehicles[i]->getPosFront().y;
+						int x = vehicles[i]->getPosFront().x;
+                        int y = vehicles[i]->getPosFront().y;
+
                         //if it is about to cross, leave it like this
 						if((x <= -1 || x >= COLS) || (y <= -1 || y >= ROWS)){
 							obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()] = NULL;
                             vehicles[i]->move();
                             vehicles[i]->Setcrossed(true);
+
                             if(dynamic_cast<Car*>(vehicles[i]))
                                 Car::IncTotalCrossed();
                             else if(dynamic_cast<Truck*>(vehicles[i]))
@@ -671,6 +659,7 @@ void Simulation::OnTick( wxTimerEvent& event )
                             score++;
                             continue;
                         }
+
 						else{ //it is still in the frame
 							compute(vehicles[i]);
 						}
