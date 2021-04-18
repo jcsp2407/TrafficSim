@@ -33,7 +33,7 @@ void Motorcycle::show(){
             dirStr = "West";
             break;
     }
-    std::cout << "Showing Motorcycle heading (" << dirStr << ") in arena " << getCurrentArena() << std::endl;
+  //  std::cout << "Showing Motorcycle heading (" << dirStr << ") in arena " << getCurrentArena() << std::endl;
 }
 
 bool Motorcycle::move(){

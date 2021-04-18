@@ -22,6 +22,8 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/gauge.h>
+#include <wx/timer.h>
 
 
 #include "Arena.h"

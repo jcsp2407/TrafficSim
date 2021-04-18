@@ -35,7 +35,7 @@ void Truck::show()
             dirStr = "West";
             break;
     }
-    std::cout << "Showing Truck heading (" << dirStr << ") in arena " << getCurrentArena()  << std::endl;
+  //  std::cout << "Showing Truck heading (" << dirStr << ") in arena " << getCurrentArena()  << std::endl;
 }
 
 bool Truck::move()

@@ -34,7 +34,7 @@ void Car::show()
             dirStr = "West";
             break;
     }
-    std::cout << "Showing Car heading (" << dirStr << ") in arena " << getCurrentArena()  << std::endl;
+ //   std::cout << "Showing Car heading (" << dirStr << ") in arena " << getCurrentArena()  << std::endl;
 }
 
 bool Car::move()

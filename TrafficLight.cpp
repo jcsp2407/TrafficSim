@@ -60,5 +60,5 @@ void TrafficLight::show()
             colorStr = "red";
             break;
     }
-    std::cout << "Showing TrafficLight (" << colorStr << ") in arena " << getCurrentArena()  << std::endl;
+ //   std::cout << "Showing TrafficLight (" << colorStr << ") in arena " << getCurrentArena()  << std::endl;
 }

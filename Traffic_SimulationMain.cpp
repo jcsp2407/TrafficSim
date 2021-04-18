@@ -355,10 +355,10 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     DrivingText = new wxStaticText(SettingPanel2, ID_DrivingText, _("Driving Mode"), wxPoint(16,96), wxDefaultSize, 0, _T("ID_DrivingText"));
     CarSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_CarSpinCtrl, _T("50"), wxPoint(336,40), wxSize(120,30), 0, 0, 100, 10, _T("ID_CarSpinCtrl"));
     CarSpinCtrl->SetValue(_T("10"));
-    BikeSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_BikeSpinCtrl, _T("50"), wxPoint(336,120), wxSize(120,30), 0, 0, 100, 0, _T("ID_BikeSpinCtrl"));
-    BikeSpinCtrl->SetValue(_T("0"));
-    TruckSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_TruckSpinCtrl, _T("50"), wxPoint(336,80), wxSize(120,30), 0, 0, 100, 0, _T("ID_TruckSpinCtrl"));
-    TruckSpinCtrl->SetValue(_T("0"));
+    BikeSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_BikeSpinCtrl, _T("50"), wxPoint(336,120), wxSize(120,30), 0, 0, 100, 10, _T("ID_BikeSpinCtrl"));
+    BikeSpinCtrl->SetValue(_T("10"));
+    TruckSpinCtrl = new wxSpinCtrl(SettingPanel2, ID_TruckSpinCtrl, _T("50"), wxPoint(336,80), wxSize(120,30), 0, 0, 100, 10, _T("ID_TruckSpinCtrl"));
+    TruckSpinCtrl->SetValue(_T("10"));
     DrivingModeCtrl = new wxChoice(SettingPanel2, ID_DrivingModeCtrl, wxPoint(16,112), wxSize(-1,30), 0, 0, 0, wxDefaultValidator, _T("ID_DrivingModeCtrl"));
     DrivingModeCtrl->SetSelection( DrivingModeCtrl->Append(_("Safe")) );
     DrivingModeCtrl->Append(_("Average"));
@@ -724,6 +724,7 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 	trucks = TruckSpinCtrl->GetValue();
 
 	int t = cars + trucks + motorcycles;
+	if(t >0){
 	scoreG->SetRange(0.75 * t);
 	if(t < 50){
         timeG->SetRange(50);}
@@ -880,7 +881,11 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
         arenas[i]->SetCellRenderer(11, 6, new myImageGridCellRenderer(grassmedianS_img));
 	 }
     screenState = state::runningScreen;
-
+	}
+	else{
+		wxMessageDialog *dialog= new wxMessageDialog(this,_T("Total Vehicles must be greater than 0"), wxEmptyString,wxOK, wxDefaultPosition );
+		dialog->ShowModal();
+	}
 }
 
 void Simulation::OnCloseSimClick(wxCommandEvent& event)
