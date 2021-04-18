@@ -90,6 +90,7 @@ class Simulation: public wxFrame
         int score;
         int speed;
         int screenState;
+        int time_per_sec;
 
         DriveModeType mode;
         bool ramps;
@@ -159,9 +160,16 @@ class Simulation: public wxFrame
         static const long ID_STATICTEXT4;
         static const long ID_STATICTEXT5;
         static const long ID_STATICTEXT6;
+        static const long ID_STATICTEXT7;
+        static const long ID_STATICTEXT8;
+        static const long ID_STATICTEXT9;
+        static const long ID_STATICTEXT10;
+        static const long ID_STATICTEXT11;
         static const long ID_BeginButton;
         static const long ID_PANEL3;
         static const long ID_PANEL1;
+        static const long ID_GAUGE1;
+        static const long ID_GAUGE2;
         //*)
 
         //(*Declarations(Simulation)
@@ -184,6 +192,13 @@ class Simulation: public wxFrame
         wxStaticText* DrivingText;
         wxStaticText* SettingsText;
         wxStaticText* TruckText;
+        wxStaticText* CarCountText;
+        wxStaticText* TruckCountText;
+        wxStaticText* MotorcycleCountText;
+        wxStaticText* ScoreText;
+        wxStaticText* TimeText;
+        wxGauge* scoreG;
+        wxGauge* timeG;
         //*)
 
         DECLARE_EVENT_TABLE()

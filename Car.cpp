@@ -1,6 +1,7 @@
 #include "Car.h"
 
 int Car::count = 0;
+int Car::totalCrossed = 0;
 
 Car::Car(DirectionType direction, int lane, wxPoint pos, int arena):
     Vehicle(direction, lane, pos, arena)
