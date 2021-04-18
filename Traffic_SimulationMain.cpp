@@ -130,25 +130,25 @@ void Simulation::compute(Vehicle* V){
 		switch(V->Getdirection()){
 				case Vehicle::DirectionType::South:
 					TL = lights[0];
-					if(V->GetOldPos().y > (TL->Getpos().y -1))
+					if(V->Getpos().y > (TL->Getpos().y -1))
 						Past_Light = true;
 					break;
 
 					case Vehicle::DirectionType::West:
 						TL = lights[1];
-						if(V->GetOldPos().x < (TL->Getpos().x-1))
+						if(V->Getpos().x < (TL->Getpos().x+1))
 							Past_Light = true;
 						break;
 
 					case Vehicle::DirectionType::North:
 						TL = lights[2];
-						if(V->GetOldPos().y <( TL->Getpos().y+1))
+						if(V->Getpos().y <( TL->Getpos().y+1))
 							Past_Light = true;
 						break;
 
 					case Vehicle::DirectionType::East:
 						TL = lights[3];
-						if(V->GetOldPos().x > (TL->Getpos().x-1))
+						if(V->Getpos().x > (TL->Getpos().x-1))
 							Past_Light = true;
 						break;
 			}
@@ -301,7 +301,7 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Timer
     SimTimer.SetOwner( this, ID_TIMER1 );
-    SimTimer.Start(200, false );
+    SimTimer.Start(1000, false );
 
     //Loading images
     car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
@@ -707,9 +707,9 @@ void Simulation::OnTick( wxTimerEvent& event )
         wxString scoreText;
         scoreText << score;
         wxString endScore = _T("Final Score: ") + scoreText;
-        CloseSimButton = new wxButton(endPanel, ID_CloseSimButton, _("Close Simulation"), wxPoint(150,125), wxSize(150,40), 0, wxDefaultValidator, _T("ID_CloseSimButton"));
+        CloseSimButton = new wxButton(endPanel, ID_CloseSimButton, _("Close Simulation"), wxPoint(165,125), wxSize(150,40), 0, wxDefaultValidator, _T("ID_CloseSimButton"));
         wxFont EndTextFont(20,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,_T("Sans"),wxFONTENCODING_DEFAULT);
-        EndText = new wxStaticText(endPanel, ID_ENDTEXT, endScore, wxPoint(150,60), wxSize(176,32), 0, _T("ID_ENDTEXT"));
+        EndText = new wxStaticText(endPanel, ID_ENDTEXT, endScore, wxPoint(145,60), wxSize(176,32), 0, _T("ID_ENDTEXT"));
         EndText->SetFont(EndTextFont);
     }
 
