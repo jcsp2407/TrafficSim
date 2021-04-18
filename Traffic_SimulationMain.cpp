@@ -147,7 +147,6 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     start_img.LoadFile( wxT("NEWSTART.jpg"), wxBITMAP_TYPE_ANY);
     end_img.LoadFile( wxT("endscreen_img.jpg"), wxBITMAP_TYPE_ANY );
     simend_img.LoadFile( wxT("simend.png"), wxBITMAP_TYPE_PNG);
-    blank_img.LoadFile( wxT("blank.png"), wxBITMAP_TYPE_ANY);
     crash_img.LoadFile( wxT("crash.png"), wxBITMAP_TYPE_ANY);
     grass_img.LoadFile( wxT("grass_img.jpg"), wxBITMAP_TYPE_ANY);
     grassmedianN_img.LoadFile( wxT("grassmedian_img.jpg"), wxBITMAP_TYPE_ANY);
