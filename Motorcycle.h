@@ -13,6 +13,8 @@ class Motorcycle : public Vehicle
 
         static int Getcount() { return count; }
         static void Setcount(int val) { count = val; }
+        static int GetTotalCrossed() { return totalCrossed; }
+        static void IncTotalCrossed() { totalCrossed++; }
 
         void show() override;
         bool move() override;
@@ -21,7 +23,7 @@ class Motorcycle : public Vehicle
 
     private:
         static int count;
-        static int total_count;
+        static int totalCrossed;
 };
 
 #endif // MOTORCYCLE_H

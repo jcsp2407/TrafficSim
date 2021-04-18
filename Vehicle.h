@@ -27,6 +27,7 @@ class Vehicle : public Entity
         void goUp(){currentArena++;}
         void goDown(){currentArena--;}
         wxPoint GetOldPos() { return oldPos; }
+        wxPoint getPosFront();
 
         virtual bool move() = 0;
 

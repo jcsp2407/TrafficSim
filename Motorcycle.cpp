@@ -1,6 +1,7 @@
 #include "Motorcycle.h"
 
 int Motorcycle::count = 0;
+int Motorcycle::totalCrossed = 0;
 
 Motorcycle::Motorcycle(DirectionType direction, int lane, wxPoint pos, int arena):
     Vehicle(direction, lane, pos, arena)

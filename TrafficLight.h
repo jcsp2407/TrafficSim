@@ -3,9 +3,9 @@
 
 #include "Entity.h"
 
-#define GREEN 5
+#define GREEN 4
 #define YELLOW 3
-#define RED 5
+#define RED 9
 
 class TrafficLight : public Entity
 {
