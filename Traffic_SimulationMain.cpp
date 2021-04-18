@@ -341,8 +341,11 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     //Panels
 	mainPanel = new wxScrolledWindow(this, ID_MAINPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxVSCROLL, _T("Main Panel"));
 	startPanel = new wxPanel(mainPanel, ID_STARTPANEL, wxDefaultPosition, wxSize(WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Start Panel"));
+	endPanel = new wxPanel(this, ID_ENDPANEL, wxDefaultPosition, wxSize(WIDTH, HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("End Panel"));
+	endPanel->Hide();
 	scorePanel = new wxPanel(this, ID_SCOREPANEL, wxPoint(R_WIDTH, 0), wxSize(WIDTH - R_WIDTH,HEIGHT), wxTAB_TRAVERSAL | wxNO_BORDER, _T("Score Panel"));
 	scorePanel->Hide();
+
 
     wxBoxSizer* BoxSizer1;
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
@@ -428,6 +431,43 @@ void Simulation::OnPaint( wxPaintEvent& event )
 
         case state::runningScreen:
         {
+			wxClientDC dc(scorePanel);
+            dc.DrawBitmap( car_img, wxPoint((WIDTH - R_WIDTH -20)/2,15), true);
+            dc.DrawBitmap( truck_img, wxPoint((WIDTH - R_WIDTH -20)/2, 55), true);
+            dc.DrawBitmap( motorcycle_img, wxPoint((WIDTH - R_WIDTH -20)/2, 95), true);
+
+            if(Car::GetTotalCrossed() < 10)
+                CarCountText->SetLabel(wxString::Format(wxT("%i"), Car::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), cars));
+            else if (Car::GetTotalCrossed() < 100){
+                CarCountText->SetPosition(wxPoint(5, 25));
+                CarCountText->SetLabel(wxString::Format(wxT("%i"), Car::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), cars));
+            }
+            else{
+                CarCountText->SetPosition(wxPoint(1, 25));
+                CarCountText->SetLabel(wxString::Format(wxT("%i"), Car::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), cars));
+            }
+
+            if(Truck::GetTotalCrossed() < 10)
+                TruckCountText->SetLabel(wxString::Format(wxT("%i"), Truck::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), trucks));
+            else if (Truck::GetTotalCrossed() < 100){
+                TruckCountText->SetPosition(wxPoint(5, 65));
+                TruckCountText->SetLabel(wxString::Format(wxT("%i"), Truck::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), trucks));
+            }
+            else{
+                TruckCountText->SetPosition(wxPoint(1, 65));
+                TruckCountText->SetLabel(wxString::Format(wxT("%i"), Truck::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), trucks));
+            }
+
+            if(Motorcycle::GetTotalCrossed() < 10)
+                MotorcycleCountText->SetLabel(wxString::Format(wxT("%i"), Motorcycle::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), motorcycles));
+            else if (Motorcycle::GetTotalCrossed() < 100){
+                MotorcycleCountText->SetPosition(wxPoint(5, 105));
+                MotorcycleCountText->SetLabel(wxString::Format(wxT("%i"), Motorcycle::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), motorcycles));
+            }
+            else{
+                MotorcycleCountText->SetPosition(wxPoint(1, 105));
+                MotorcycleCountText->SetLabel(wxString::Format(wxT("%i"), Motorcycle::GetTotalCrossed()) + "/" + wxString::Format(wxT("%i"), motorcycles));
+            }
 
             int total = Vehicle::Gettotal();
             int a;
@@ -496,8 +536,9 @@ void Simulation::OnPaint( wxPaintEvent& event )
 				render = new myImageGridCellRenderer(crash_img);
             }
 
-            if( obstacles[vehicles[i]->GetOldPos().x][vehicles[i]->GetOldPos().y][a] == NULL)
+            if( (obstacles[vehicles[i]->GetOldPos().x][vehicles[i]->GetOldPos().y][a] == NULL) || vehicles[i]->Getcrossed()	)
 				arenas[a]->SetCellRenderer(vehicles[i]->GetOldPos().y, vehicles[i]->GetOldPos().x, new myImageGridCellRenderer(grey_img));
+
 			arenas[a]->SetCellRenderer(vehicles[i]->Getpos().y, vehicles[i]->Getpos().x, render);
             }
 			}
@@ -557,6 +598,7 @@ void Simulation::OnPaint( wxPaintEvent& event )
                 }
                 render = new myImageGridCellRenderer(img);
                 arenas[i/LIGHTS_PER_ARENA]->SetCellRenderer(lights[i]->Getpos().y, lights[i]->Getpos().x, render);
+
             }
 
 		for(int k=0; k < arenasCnt ; k++)
@@ -565,6 +607,13 @@ void Simulation::OnPaint( wxPaintEvent& event )
 				arenas[k]->SetCellRenderer(	0,0, render);
 		}
 
+		scoreG->SetValue(score);
+		if(time_per_sec % (SimTimer.GetInterval())){
+			if(timeG->GetValue() < timeG->GetRange()){
+				timeG->SetValue(timeG->GetValue() + 1);
+				time_per_sec = 0;
+			}
+		}
         }
             break;
 
@@ -612,6 +661,13 @@ void Simulation::OnTick( wxTimerEvent& event )
 							obstacles[vehicles[i]->Getpos().x][vehicles[i]->Getpos().y][vehicles[i]->getCurrentArena()] = NULL;
                             vehicles[i]->move();
                             vehicles[i]->Setcrossed(true);
+                            if(dynamic_cast<Car*>(vehicles[i]))
+                                Car::IncTotalCrossed();
+                            else if(dynamic_cast<Truck*>(vehicles[i]))
+                                Truck::IncTotalCrossed();
+                            else if(dynamic_cast<Motorcycle*>(vehicles[i]))
+                                Motorcycle::IncTotalCrossed();
+
                             score++;
                             continue;
                         }
@@ -632,6 +688,7 @@ void Simulation::OnTick( wxTimerEvent& event )
             for(int i= 0; i < lightsCnt; i++)
                 lights[i]->alternate();
 
+			time_per_sec++;
 
         }
             break;
@@ -639,8 +696,6 @@ void Simulation::OnTick( wxTimerEvent& event )
         default:
             break;
 	}
-
-	std::cout << score << std::endl;
 
 	this->Refresh();
 
@@ -667,6 +722,8 @@ void Simulation::OnClickToStart(wxMouseEvent& event)
     screenState = state::settingsScreen;
     startPanel->Hide();
 	SettingPanel2->Show();
+	endPanel->Hide();
+	scorePanel->Hide();
 }
 
 void Simulation::OnBeginButtonClick(wxCommandEvent& event)
@@ -699,10 +756,10 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
     arenas = new Arena*[arenasCnt];
     int yPos = 0;
     for(int i = 0; i < arenasCnt; i++){
-        arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(WIDTH/2), yPos), wxSize(A_WIDTH,A_HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
+        arenas[i] = new Arena(mainPanel, wxID_ANY, wxPoint((i % 2)*(R_WIDTH/2), yPos), wxSize(A_WIDTH,A_HEIGHT), wxTAB_TRAVERSAL | wxBORDER);
         arenas[i]->CreateGrid(ROWS,COLS);
         arenas[i]->EnableEditing(true);
-        arenas[i]->EnableGridLines(true);
+        arenas[i]->EnableGridLines(false);
         arenas[i]->SetColLabelSize(1);
         arenas[i]->SetRowLabelSize(1);
         arenas[i]->SetRowMinimalAcceptableHeight(10);
@@ -805,6 +862,7 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 	startPanel->Hide();
 	SettingPanel2->Hide();
 	mainPanel->Show();
+	scorePanel->Show();
 
 	for(int k=0; k < arenasCnt ; k++)
 	{
