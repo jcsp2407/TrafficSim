@@ -8,7 +8,7 @@ Video Demo: https://youtu.be/4DSaTW_wFcU
 * BeagleBone Black board
 * LCD Display cape
 
-![Materials](https://github.com/adrianmuino/TrafficSim/blob/main/IMG_0640.jpg)
+![Materials](https://github.com/jcsp2407/TrafficSim/blob/Adrian/IMG_0640.jpg)
 
 ## Step 1: Setup your Ubuntu VM in VirtualBox.
 In your VirtualBox Ubuntu VM make sure to go to Settings >> Ports >> USB. Enable the USB 3.0 Controller.
