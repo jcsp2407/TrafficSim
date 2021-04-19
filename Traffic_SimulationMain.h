@@ -141,7 +141,9 @@ class Simulation: public wxFrame
         wxImage grassmedianS_img;
         wxImage grassmedianW_img;
         wxImage grey_img;
-
+	wxImage traffic_img;
+        wxImage sim_img;
+        wxImage clicktostart_img;
         wxFont startScreenFont;
 
         //(*Handlers(Simulation)
