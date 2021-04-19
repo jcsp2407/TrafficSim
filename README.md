@@ -107,33 +107,34 @@ exit
 ```
 ## Step 5: Compile your WxWidgets application and run it on the BBB.
 
-In your Ubuntu VM navigate to the directory of the Traffic Sim project. It should be zipped already.
+In your Ubuntu VM navigate to the soure files directory of the TrafficSim project directory.
 ```bash
-cd ~/Traffic-Sim/TrafficSim
+cd ~/TrafficSim/src
 ```
 
-Transfer the zipped project into the BBB.
+Create a zipped file of the sources and its dependencies.
+```bash
+make tar
+```
 
+Transfer the zipped file into the BBB.
 ```bash
 scp TrafficSim.tar debian@192.168.7.2:/home/debian
 ```
 
 Open a secure shell to your BBB.
-
 ```bash
 ssh 192.168.7.2 -l debian
 ```
 
 Extract the project tar file.
-
 ```bash
-unzip TrafficSim.zip
+tar -xf TrafficSim.tar
 ```
 
 Compile your wxWidgets application using the make utility.
-
 ```bash
-make
+cd src && make
 ```
 
 Execute the program.
