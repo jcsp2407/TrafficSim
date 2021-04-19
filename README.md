@@ -1,5 +1,5 @@
-# Draw-App-BBB
-Tutorial to deploy Draw application on the Beagle Bone Black.
+# Traffic Sim 
+Tutorial to deploy the Traffic Sim application on the Beagle Bone Black.
 
 ## What you will need:
 * SD card with 4 GB or more.
@@ -104,13 +104,13 @@ Exit the ssh session.
 exit
 ```
 ## Step 5: Compile your WxWidgets application and run it on the BBB.
-In your Ubuntu VM navigate to the directory of your Draw project.
+In your Ubuntu VM navigate to the directory of the Traffic Sim project.
 ```bash
-cd ~/Draw-App-BBB/Draw
+cd ~/Traffic-Sim/TrafficSim
 ```
 Create the following makefile in the directory of your draw project:
 ```makefile
-# Makefile for Draw application 
+# Makefile for the Traffic Sim application 
 
 OBJS = DrawApp.o DrawMain.o
 EXE = Draw
@@ -136,7 +136,7 @@ make tar
 ```
 Transfer the extracted directory into the BBB.
 ```bash
-scp Draw.tar debian@192.168.7.2:/home/debian
+scp TrafficSim.tar debian@192.168.7.2:/home/debian
 ```
 Open a secure shell to your BBB.
 ```bash
@@ -144,13 +144,13 @@ ssh 192.168.7.2 -l debian
 ```
 Extract the project tar file.
 ```bash
-tar -xf Draw.tar
+tar -xf TrafficSim.tar
 ```
 Compile your wxWidgets application using the make utility.
 ```bash
 make
 ```
-On your BBB LCD go to /home/debian/ and click on the Draw program to run your application.
+On your BBB LCD go to /home/debian/ and click on the Traffic Sim program to run your application.
 
 ### Draw App in Click Mode
 ![Click Mode](https://github.com/adrianmuino/Draw-App-BBB/blob/main/File_000.jpeg)
