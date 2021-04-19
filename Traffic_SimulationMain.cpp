@@ -308,7 +308,7 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
 
     //Re-scaling images
     car_img = car_img.Rescale(100, 50).ShrinkBy(7,5);
-    truck_img = truck_img.Rescale(100, 50).ShrinkBy(5,5);
+    truck_img = truck_img.Rescale(100, 50).ShrinkBy(7,5);
     motorcycle_img = motorcycle_img.ShrinkBy(7,6);
     trafficGreen_img = trafficGreen_img.Rescale(10,25).ShrinkBy(2,2);
     trafficRed_img = trafficRed_img.Rescale(10,25).ShrinkBy(2,2);
@@ -623,7 +623,82 @@ void Simulation::OnTick( wxTimerEvent& event )
 	switch (screenState){
         case state::runningScreen:
         {
-            int total = Vehicle::Gettotal();
+            int total;
+
+            if(Car::Getcount() < cars){
+                // Get random vehicle spawn coordinates
+                randXY();
+                Vehicle::DirectionType dir;
+
+                switch(xRand){
+                    case 0: dir = Vehicle::DirectionType::East; break;
+                    case 13: dir = Vehicle::DirectionType::West; break;
+                }
+                switch(yRand){
+                    case 0: dir = Vehicle::DirectionType::South; break;
+                    case 13: dir = Vehicle::DirectionType::North; break;
+                }
+
+                total = Vehicle::Gettotal();
+
+                int a = rand() % arenasCnt;
+
+                if(obstacles[xRand][yRand][a] == NULL){
+                    vehicles[total] = new Car(dir, 1, wxPoint(xRand, yRand), a);
+                    obstacles[xRand][yRand][a] = vehicles[total - 1];
+                }
+
+            }
+
+            if(Truck::Getcount() < trucks){
+                // Get random vehicle spawn coordinates
+                randXY();
+                Vehicle::DirectionType dir;
+
+                switch(xRand){
+                    case 0: dir = Vehicle::DirectionType::East; break;
+                    case 13: dir = Vehicle::DirectionType::West; break;
+                }
+                switch(yRand){
+                    case 0: dir = Vehicle::DirectionType::South; break;
+                    case 13: dir = Vehicle::DirectionType::North; break;
+                }
+
+                total = Vehicle::Gettotal();
+
+                int a = rand() % arenasCnt;
+
+                if(obstacles[xRand][yRand][a] == NULL){
+                    vehicles[total] = new Truck(dir, 1, wxPoint(xRand, yRand), a);
+                    obstacles[xRand][yRand][a] = vehicles[total - 1];
+                }
+            }
+
+            if(Motorcycle::Getcount() < motorcycles){
+                // Get random vehicle spawn coordinates
+                randXY();
+                Vehicle::DirectionType dir;
+
+                switch(xRand){
+                    case 0: dir = Vehicle::DirectionType::East; break;
+                    case 13: dir = Vehicle::DirectionType::West; break;
+                }
+                switch(yRand){
+                    case 0: dir = Vehicle::DirectionType::South; break;
+                    case 13: dir = Vehicle::DirectionType::North; break;
+                }
+
+                total = Vehicle::Gettotal();
+
+                int a = rand() % arenasCnt;
+
+                if(obstacles[xRand][yRand][a] == NULL){
+                    vehicles[total] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), a);
+                    obstacles[xRand][yRand][a] = vehicles[total - 1];
+                }
+            }
+
+            total = Car::Getcount() + Truck::Getcount() + Motorcycle::Getcount();
 
             Vehicle* temp;
             int r_index;
@@ -808,7 +883,12 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 
         total = Vehicle::Gettotal();
 
-        vehicles[total] = new Car(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+        int a = rand() % arenasCnt;
+
+        if(obstacles[xRand][yRand][a] == NULL){
+            vehicles[total] = new Car(dir, 1, wxPoint(xRand, yRand), a);
+            obstacles[xRand][yRand][a] = vehicles[total - 1];
+        }
     }
 
     for(int i = 0; i < trucks; i++){
@@ -827,7 +907,12 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 
         total = Vehicle::Gettotal();
 
-        vehicles[total] = new Truck(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+        int a = rand() % arenasCnt;
+
+        if(obstacles[xRand][yRand][a] == NULL){
+            vehicles[total] = new Truck(dir, 1, wxPoint(xRand, yRand), a);
+            obstacles[xRand][yRand][a] = vehicles[total - 1];
+        }
     }
 
     for(int i = 0; i < motorcycles; i++){
@@ -846,7 +931,12 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 
         total = Vehicle::Gettotal();
 
-        vehicles[total] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), rand() % arenasCnt);
+        int a = rand() % arenasCnt;
+
+        if(obstacles[xRand][yRand][a] == NULL){
+            vehicles[total] = new Motorcycle(dir, 1, wxPoint(xRand, yRand), a);
+            obstacles[xRand][yRand][a] = vehicles[total - 1];
+        }
     }
 
 	startPanel->Hide();
