@@ -1,5 +1,6 @@
 # Traffic Sim 
 Tutorial to deploy the Traffic Sim application on the Beagle Bone Black.
+
 Video Demo: https://youtu.be/IDbfKa5OBrY
 
 ## What you will need:
