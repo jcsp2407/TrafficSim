@@ -108,7 +108,7 @@ In your Ubuntu VM navigate to the directory of the Traffic Sim project.
 ```bash
 cd ~/Traffic-Sim/TrafficSim
 ```
-Create the following makefile in the directory of your draw project:
+Create the following makefile in the directory of your Traffic Sim project:
 ```makefile
 # Makefile for Traffic Simulation application 
 
