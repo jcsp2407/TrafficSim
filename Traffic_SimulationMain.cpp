@@ -1,6 +1,6 @@
 /***************************************************************
  * Name:      Traffic_SimulationMain.cpp
- * Purpose:   Code for Application Frame
+ * Purpose:   Code for Application
  * Author:    Adrian A. Muino, Juan Saez, Alexander Perez ()
  * Created:   2021-03-28
  * Copyright: Adrian A. Muino, Juan Saez, Alexander Perez ()
@@ -296,7 +296,12 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     trafficRed_img.LoadFile( wxT( "red.png" ), wxBITMAP_TYPE_PNG );
     trafficYellow_img.LoadFile( wxT( "yellow.png" ), wxBITMAP_TYPE_PNG );
     trafficGreen_img.LoadFile( wxT( "green.png" ), wxBITMAP_TYPE_PNG );
-    start_img.LoadFile( wxT("NEWSTART.jpg"), wxBITMAP_TYPE_ANY);
+    
+    start_img.LoadFile( wxT("endscreen_img.jpg"), wxBITMAP_TYPE_ANY);
+    traffic_img.LoadFile( wxT("Traffic.png"), wxBITMAP_TYPE_PNG);
+    sim_img.LoadFile( wxT("Sim.png"), wxBITMAP_TYPE_PNG);
+    clicktostart_img.LoadFile( wxT("Clicktostart.png"), wxBITMAP_TYPE_PNG);
+
     end_img.LoadFile( wxT("endscreen_img.jpg"), wxBITMAP_TYPE_ANY );
     simend_img.LoadFile( wxT("simend.png"), wxBITMAP_TYPE_PNG);
     crash_img.LoadFile( wxT("crash.png"), wxBITMAP_TYPE_ANY);
@@ -311,10 +316,16 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     trafficGreen_img = trafficGreen_img.Rescale(10,25).ShrinkBy(2,2);
     trafficRed_img = trafficRed_img.Rescale(10,25).ShrinkBy(2,2);
     trafficYellow_img = trafficYellow_img.Rescale(10,25).ShrinkBy(2,2);
+	
+    start_img = start_img.Scale(WIDTH, HEIGHT);
+    traffic_img = traffic_img.ShrinkBy(2,2);
+    sim_img = sim_img.ShrinkBy(2,2);
+    clicktostart_img = clicktostart_img.ShrinkBy(2,2);	
     end_img = end_img.Scale(WIDTH, HEIGHT);
     grey_img = grey_img.Rescale(15,15);
     crash_img = crash_img.ShrinkBy(73,61);
-	grass_img = grass_img.ShrinkBy(8,8);
+    grass_img = grass_img.ShrinkBy(8,8);
+	
     grassmedianN_img = grassmedianN_img.Rescale(28, 44);
     grassmedianE_img = grassmedianN_img.Rotate90(true);
     grassmedianS_img = grassmedianN_img.Rotate180();
@@ -410,10 +421,11 @@ void Simulation::OnPaint( wxPaintEvent& event )
     switch (screenState){
         case state::startScreen:
         {
-			wxBitmap resized;
-            wxClientDC dc(startPanel);
-            resized = wxBitmap( start_img.Scale( this->GetSize().GetWidth(), this->GetSize().GetHeight() ), wxIMAGE_QUALITY_HIGH );
-            dc.DrawBitmap(resized,wxPoint(0,0), true);
+	    wxClientDC dc(startPanel);
+            dc.DrawBitmap(start_img, wxPoint(0,0), true);
+            dc.DrawBitmap(traffic_img, wxPoint(70,20), true);
+            dc.DrawBitmap(sim_img, wxPoint(200, 80), true);
+            dc.DrawBitmap(clicktostart_img, wxPoint(120, 177), true);
         }
             break;
 
