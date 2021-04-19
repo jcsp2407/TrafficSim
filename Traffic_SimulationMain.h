@@ -28,11 +28,8 @@
 
 #include "Arena.h"
 #include "Car.h"
-//#include "Curb.h"
 #include "Entity.h"
 #include "Motorcycle.h"
-///#include "Ramp.h"
-///#include "Traffic_SimulationApp.h"
 #include "TrafficLight.h"
 #include "Truck.h"
 #include "Vehicle.h"
