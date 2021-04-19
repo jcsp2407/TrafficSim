@@ -1,12 +1,14 @@
 # Traffic Sim 
 Tutorial to deploy the Traffic Sim application on the Beagle Bone Black.
 
-Video Demo: https://youtu.be/IDbfKa5OBrY
+Video Demo: https://youtu.be/4DSaTW_wFcU
 
 ## What you will need:
 * SD card with 4 GB or more.
 * BeagleBone Black board
 * LCD Display cape
+
+![Materials](https://github.com/adrianmuino/TrafficSim/blob/main/IMG_0640.jpg)
 
 ## Step 1: Setup your Ubuntu VM in VirtualBox.
 In your VirtualBox Ubuntu VM make sure to go to Settings >> Ports >> USB. Enable the USB 3.0 Controller.
