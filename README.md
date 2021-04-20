@@ -7,7 +7,7 @@ Video Demo: https://youtu.be/4DSaTW_wFcU
 * SD card with 4 GB or more.
 * BeagleBone Black board
 * LCD Display cape
-
+![Materials](https://github.com/jcsp2407/TrafficSim/blob/main/IMG_0640.jpg)
 ## Step 1: Setup your Ubuntu VM in VirtualBox.
 In your VirtualBox Ubuntu VM make sure to go to Settings >> Ports >> USB. Enable the USB 3.0 Controller.
 
