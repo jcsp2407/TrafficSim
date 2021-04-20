@@ -1,7 +1,7 @@
 # Traffic Sim 
 Tutorial to deploy the Traffic Sim application on the Beagle Bone Black.
 
-Video Demo: https://youtu.be/IDbfKa5OBrY
+Video Demo: https://youtu.be/4DSaTW_wFcU
 
 ## What you will need:
 * SD card with 4 GB or more.
