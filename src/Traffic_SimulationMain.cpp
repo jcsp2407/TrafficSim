@@ -22,7 +22,7 @@
 #define ROWS 14
 #define COLS 14
 #define LIGHTS_PER_ARENA 4
-#define TIME 20
+#define TIME 25
 
 unsigned int random_list[] = {0,3,4,5,8,9,10,13};
 
@@ -290,24 +290,24 @@ Simulation::Simulation(wxWindow* parent,wxWindowID id)
     SimTimer.Start(500, false );
 
     //Loading images
-    car_img.LoadFile( wxT( "car2_img.png" ), wxBITMAP_TYPE_PNG );
-    truck_img.LoadFile( wxT( "truck.png" ), wxBITMAP_TYPE_PNG );
-    motorcycle_img.LoadFile( wxT( "bike.png" ), wxBITMAP_TYPE_PNG );
-    trafficRed_img.LoadFile( wxT( "red.png" ), wxBITMAP_TYPE_PNG );
-    trafficYellow_img.LoadFile( wxT( "yellow.png" ), wxBITMAP_TYPE_PNG );
-    trafficGreen_img.LoadFile( wxT( "green.png" ), wxBITMAP_TYPE_PNG );
+    car_img.LoadFile( wxT( "../assets/car2_img.png" ), wxBITMAP_TYPE_PNG );
+    truck_img.LoadFile( wxT( "../assets/truck.png" ), wxBITMAP_TYPE_PNG );
+    motorcycle_img.LoadFile( wxT( "../assets/bike.png" ), wxBITMAP_TYPE_PNG );
+    trafficRed_img.LoadFile( wxT( "../assets/red.png" ), wxBITMAP_TYPE_PNG );
+    trafficYellow_img.LoadFile( wxT( "../assets/yellow.png" ), wxBITMAP_TYPE_PNG );
+    trafficGreen_img.LoadFile( wxT( "../assets/green.png" ), wxBITMAP_TYPE_PNG );
     
-    start_img.LoadFile( wxT("endscreen_img.jpg"), wxBITMAP_TYPE_ANY);
-    traffic_img.LoadFile( wxT("Traffic.png"), wxBITMAP_TYPE_PNG);
-    sim_img.LoadFile( wxT("Sim.png"), wxBITMAP_TYPE_PNG);
-    clicktostart_img.LoadFile( wxT("Clicktostart.png"), wxBITMAP_TYPE_PNG);
+    start_img.LoadFile( wxT("../assets/endscreen_img.jpg"), wxBITMAP_TYPE_ANY);
+    traffic_img.LoadFile( wxT("../assets/Traffic.png"), wxBITMAP_TYPE_PNG);
+    sim_img.LoadFile( wxT("../assets/Sim.png"), wxBITMAP_TYPE_PNG);
+    clicktostart_img.LoadFile( wxT("../assets/Clicktostart.png"), wxBITMAP_TYPE_PNG);
 
-    end_img.LoadFile( wxT("endscreen_img.jpg"), wxBITMAP_TYPE_ANY );
-    simend_img.LoadFile( wxT("simend.png"), wxBITMAP_TYPE_PNG);
-    crash_img.LoadFile( wxT("crash.png"), wxBITMAP_TYPE_ANY);
-    grass_img.LoadFile( wxT("grass_img.jpg"), wxBITMAP_TYPE_ANY);
-    grassmedianN_img.LoadFile( wxT("grassmedian_img.jpg"), wxBITMAP_TYPE_ANY);
-	grey_img.LoadFile( wxT("grey.png"), wxBITMAP_TYPE_PNG);
+    end_img.LoadFile( wxT("../assets/endscreen_img.jpg"), wxBITMAP_TYPE_ANY );
+    simend_img.LoadFile( wxT("../assets/simend.png"), wxBITMAP_TYPE_PNG);
+    crash_img.LoadFile( wxT("../assets/crash.png"), wxBITMAP_TYPE_ANY);
+    grass_img.LoadFile( wxT("../assets/grass_img.jpg"), wxBITMAP_TYPE_ANY);
+    grassmedianN_img.LoadFile( wxT("../assets/grassmedian_img.jpg"), wxBITMAP_TYPE_ANY);
+	grey_img.LoadFile( wxT("../assets/grey.png"), wxBITMAP_TYPE_PNG);
 
     //Re-scaling images
     car_img = car_img.Rescale(100, 50).ShrinkBy(7,5);
@@ -625,6 +625,9 @@ void Simulation::OnPaint( wxPaintEvent& event )
 
         case state::endScreen:
         {
+            mainPanel->Hide();
+            scorePanel->Hide();
+            endPanel->Show();
             wxClientDC dc(endPanel);
             dc.DrawBitmap(end_img, wxPoint(0,0), true);
             dc.DrawBitmap(simend_img, wxPoint(8,10), true);
@@ -783,11 +786,7 @@ void Simulation::OnTick( wxTimerEvent& event )
 
 	this->Refresh();
 
-	if((screenState == state::runningScreen) && ((timeG->GetValue() <= 0) || scoreG->GetValue() >= scoreG->GetRange())){
-		mainPanel->Hide();
-        scorePanel->Hide();
-		endPanel->Show();
-        screenState = state::endScreen;
+	if((screenState == state::runningScreen) && ((mytimeCount <= 0) || (score >= scoreG->GetRange()))){
         wxString scoreText;
         scoreText << score;
         wxString endScore = _T("Final Score: ") + scoreText;
@@ -795,6 +794,7 @@ void Simulation::OnTick( wxTimerEvent& event )
         wxFont EndTextFont(20,wxFONTFAMILY_SWISS,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_NORMAL,false,_T("Sans"),wxFONTENCODING_DEFAULT);
         EndText = new wxStaticText(endPanel, ID_ENDTEXT, endScore, wxPoint(145,60), wxSize(176,32), 0, _T("ID_ENDTEXT"));
         EndText->SetFont(EndTextFont);
+        screenState = state::endScreen;
     }
 
 
@@ -817,6 +817,7 @@ void Simulation::OnBeginButtonClick(wxCommandEvent& event)
 	motorcycles = BikeSpinCtrl->GetValue();
 	cars = CarSpinCtrl->GetValue();
 	trucks = TruckSpinCtrl->GetValue();
+	mytimeCount = TIME;
 
 	int t = cars + trucks + motorcycles;
 	if(t > 0){
